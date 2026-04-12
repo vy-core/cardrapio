@@ -8,13 +8,13 @@ import { formatPrice } from "@/lib/utils";
 type CheckoutStep = "cart" | "checkout" | "success";
 
 export function CartDrawer() {
-  const items          = useCartStore((s) => s.items);
-  const isOpen         = useCartStore((s) => s.isOpen);
-  const closeCart      = useCartStore((s) => s.closeCart);
+  const items = useCartStore((s) => s.items);
+  const isOpen = useCartStore((s) => s.isOpen);
+  const closeCart = useCartStore((s) => s.closeCart);
   const updateQuantity = useCartStore((s) => s.updateQuantity);
-  const removeItem     = useCartStore((s) => s.removeItem);
-  const clearCart      = useCartStore((s) => s.clearCart);
-  const totalPrice     = useCartStore((s) => s.totalPrice());
+  const removeItem = useCartStore((s) => s.removeItem);
+  const clearCart = useCartStore((s) => s.clearCart);
+  const totalPrice = useCartStore((s) => s.totalPrice());
 
   const [step, setStep] = useState<CheckoutStep>("cart");
   const [formData, setFormData] = useState({
@@ -38,8 +38,28 @@ export function CartDrawer() {
 
   const handleCheckoutSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Here we would typically send the order to the backend via an API
-    // For now, we simulate success
+
+    // Generate WhatsApp text
+    let text = `*Novo Pedido Açaí & Cia* 🟣\n\n`;
+    text += `*Cliente:* ${formData.name}\n`;
+    text += `*Telefone:* ${formData.phone}\n`;
+    text += `*Endereço:* ${formData.address}\n\n`;
+
+    text += `*Itens do Pedido:*\n`;
+    items.forEach((item) => {
+      text += `- ${item.quantity}x ${item.product.name} (${formatPrice(item.product.price * item.quantity)})\n`;
+    });
+
+    text += `\n*Total:* ${formatPrice(totalPrice)}\n`;
+    text += `*Pagamento:* ${formData.payment === 'pix' ? 'Pix' : formData.payment === 'card' ? 'Cartão' : 'Dinheiro'}\n`;
+    if (formData.payment === "cash" && formData.change) {
+      text += `*Troco para:* ${formData.change}\n`;
+    }
+
+    const encodedText = encodeURIComponent(text);
+    const phone = "5531989820947"; // Replace with real number later
+    window.open(`https://wa.me/${phone}?text=${encodedText}`, "_blank");
+
     setStep("success");
   };
 
@@ -49,7 +69,7 @@ export function CartDrawer() {
     <>
       <div className="cart-overlay animate-fade-in" onClick={handleClose} />
       <div className="fixed right-0 top-0 h-full w-full max-w-md bg-white z-50 flex flex-col shadow-2xl animate-slide-in">
-        
+
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-white">
           <div className="flex items-center gap-2">
@@ -80,7 +100,11 @@ export function CartDrawer() {
                 items.map((item) => (
                   <div key={item.product.id} className="flex items-start gap-4 p-4 rounded-2xl bg-white border border-brand-100/60 shadow-sm">
                     <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-brand-50 to-brand-100 flex items-center justify-center text-2xl flex-shrink-0">
-                      {item.product.category_id === "cat-1" ? "🟣" : item.product.category_id === "cat-2" ? "🍦" : item.product.category_id === "cat-3" ? "🍧" : item.product.category_id === "cat-4" ? "🥤" : "🍫"}
+                      {item.product.image_url ? (
+                        <img src={item.product.image_url} alt={item.product.name} className="w-full h-full object-cover rounded-xl" />
+                      ) : (
+                        item.product.category === "cat-1" ? "🟣" : item.product.category === "cat-2" ? "🍦" : item.product.category === "cat-3" ? "🍧" : item.product.category === "cat-4" ? "🥤" : "🍫"
+                      )}
                     </div>
                     <div className="flex-1 min-w-0 pt-0.5">
                       <p className="font-semibold text-gray-900 leading-tight">{item.product.name}</p>
@@ -111,7 +135,7 @@ export function CartDrawer() {
                   <label className="text-sm font-bold text-gray-800">Seu Nome</label>
                   <input required placeholder="Como podemos te chamar?" className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-200 transition-all text-[15px]" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
                 </div>
-                
+
                 <div className="space-y-1.5">
                   <label className="text-sm font-bold text-gray-800">Telefone / WhatsApp</label>
                   <input required type="tel" placeholder="(11) 90000-0000" className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-200 transition-all text-[15px]" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} />
@@ -135,10 +159,10 @@ export function CartDrawer() {
                   </div>
 
                   {formData.payment === "cash" && (
-                     <div className="animate-slide-in mt-2 space-y-1.5">
-                       <label className="text-sm font-semibold text-gray-600">Troco para quanto?</label>
-                       <input placeholder="Ex: 50,00 (Deixe em branco se não precisar)" className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white outline-none focus:border-brand-500 transition-all text-[15px]" value={formData.change} onChange={(e) => setFormData({ ...formData, change: e.target.value })} />
-                     </div>
+                    <div className="animate-slide-in mt-2 space-y-1.5">
+                      <label className="text-sm font-semibold text-gray-600">Troco para quanto?</label>
+                      <input placeholder="Ex: 50,00 (Deixe em branco se não precisar)" className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white outline-none focus:border-brand-500 transition-all text-[15px]" value={formData.change} onChange={(e) => setFormData({ ...formData, change: e.target.value })} />
+                    </div>
                   )}
                 </div>
               </form>
@@ -170,11 +194,11 @@ export function CartDrawer() {
           <div className="border-t border-brand-100 px-5 py-5 flex flex-col gap-4 bg-white shadow-[0_-4px_20px_rgba(0,0,0,0.03)]">
             <div className="flex items-center justify-between">
               <span className="text-[15px] font-medium text-gray-600">Total do pedido</span>
-              <span className="font-sans font-black text-gray-900 text-[22px]">
+              <span className="font-sans font-bold text-gray-900 text-[22px]">
                 {formatPrice(totalPrice)}
               </span>
             </div>
-            
+
             {step === "cart" ? (
               <button onClick={() => setStep("checkout")} className="w-full flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 active:bg-brand-800 text-white font-bold py-3.5 rounded-xl transition-all shadow-md text-[16px]">
                 Avançar

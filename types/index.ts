@@ -21,12 +21,13 @@ export interface Category {
 
 export interface Product {
   id: string;
-  category_id: string;
+  category: string;
   name: string;
   description: string;
   price: number;
   image_url?: string;
   available: boolean;
+  best_seller?: boolean;
 }
 
 // ─── Cart ────────────────────────────────────────────────────────────────────

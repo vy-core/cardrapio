@@ -1,6 +1,6 @@
 "use client";
 
-import { Info, ShoppingBag } from "lucide-react";
+import { ChevronLeft, Info, ShoppingBag } from "lucide-react";
 import { useCartStore } from "@/lib/cart-store";
 import { formatPrice } from "@/lib/utils";
 import Link from "next/link";
@@ -9,8 +9,8 @@ import { usePathname } from "next/navigation";
 export function Header() {
   const totalItems = useCartStore((s) => s.totalItems());
   const totalPrice = useCartStore((s) => s.totalPrice());
-  const openCart   = useCartStore((s) => s.openCart);
-  const pathname   = usePathname();
+  const openCart = useCartStore((s) => s.openCart);
+  const pathname = usePathname();
 
   if (pathname === "/about") return null;
 
@@ -19,17 +19,13 @@ export function Header() {
       <div className="max-w-5xl mx-auto px-4 h-[72px] flex items-center justify-between gap-4">
         {/* Logo */}
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-brand-600 flex items-center justify-center shadow-md">
-            <span className="text-xl text-white">🟣</span>
-          </div>
+          <Link href="/" className="w-11 h-11 rounded-2xl bg-brand-600 flex items-center justify-center shadow-md">
+            <ChevronLeft className="w-5 h-5 text-white" />
+          </Link>
           <div>
-            <h1 className="font-display text-gray-900 font-bold text-lg leading-tight">
-              Açaiteria Premium
+            <h1 className="font-display text-brand-800 font-bold text-lg leading-tight">
+              Açaí & Cia
             </h1>
-            <Link href="/about" className="flex items-center gap-1 text-xs font-medium text-brand-600 hover:text-brand-800 transition-colors mt-0.5">
-              <Info className="w-3 h-3" />
-              <span>Ver informações da loja</span>
-            </Link>
           </div>
         </div>
 

@@ -1,0 +1,62 @@
+import { formatPrice } from "@/lib/utils";
+import ProductDialog from "../dialogs/product-dialog";
+import { MOCK_PRODUCTS } from "@/lib/mocks";
+
+export default function ProdutosView() {
+    return (
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 overflow-hidden flex flex-col">
+            <div className="flex items-center justify-between mb-6">
+                <h2 className="text-lg font-bold text-gray-900">Gerenciar Cardápio</h2>
+                <ProductDialog onSubmit={(product) => console.log(product)}
+                    triggerName="+ Novo Produto"
+                    triggerClassName="bg-brand-600 hover:bg-brand-700 p-2 rounded-full px-4 text-white"
+                />
+            </div>
+
+            <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse min-w-[600px]">
+                    <thead>
+                        <tr className="border-b border-gray-200">
+                            <th className="font-bold text-xs uppercase p-4 pl-0">Produto</th>
+                            <th className="font-bold text-xs uppercase p-4">Categoria</th>
+                            <th className="font-bold text-xs uppercase p-4">Preço</th>
+                            <th className="font-bold text-xs uppercase p-4 text-center">Status</th>
+                            <th className="font-bold text-xs uppercase p-4"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {MOCK_PRODUCTS.slice(0, 7).map((p) => (
+                            <tr key={p.id} className="border-b border-gray-50">
+                                <td className="p-4 pl-0">
+                                    <p className="font-bold text-[14px] text-gray-900">{p.name}</p>
+                                    <p className="text-xs font-semibold text-gray-500 mt-1 max-w-[200px] truncate">{p.description}
+                                    </p>
+                                </td>
+                                <td className="p-4 text-sm font-semibold text-gray-600 capitalize">
+                                    {p.category.replace("cat-", "Categoria ")}
+                                </td>
+                                <td className="p-4 text-sm font-semibold text-brand-700">{formatPrice(p.price)}</td>
+                                <td className="p-4 text-center">
+                                    <span className={`inline-block px-3 py-1 text-[11px] font-bold uppercase rounded-full
+                            ${p.available ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                        {p.available ? "Disponível" : "Esgotado"}
+                                    </span>
+                                </td>
+                                <td className="p-4 text-right">
+                                    <ProductDialog product={p} onSubmit={(product) => console.log(product)}
+                                        triggerName="Editar"
+                                        triggerClassName="text-sm font-bold text-brand-600 hover:underline"
+                                    />
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+            <div className="pt-4 mt-auto border-t border-gray-100 text-center">
+                <button className="text-sm font-bold text-gray-500 hover:text-gray-800 transition-colors">Exibir todos
+                    ({MOCK_PRODUCTS.length})</button>
+            </div>
+        </div>
+    );
+}
