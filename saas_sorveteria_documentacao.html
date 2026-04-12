@@ -1,0 +1,1017 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Fraunces:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --doc-bg: var(--color-background-tertiary);
+    --card: var(--color-background-primary);
+    --border: var(--color-border-tertiary);
+    --border-md: var(--color-border-secondary);
+    --text: var(--color-text-primary);
+    --muted: var(--color-text-secondary);
+    --hint: var(--color-text-tertiary);
+    --accent: #185FA5;
+    --accent-bg: #E6F1FB;
+    --accent-text: #0C447C;
+    --green-bg: #EAF3DE;
+    --green-text: #3B6D11;
+    --amber-bg: #FAEEDA;
+    --amber-text: #854F0B;
+    --red-bg: #FCEBEB;
+    --red-text: #A32D2D;
+    --teal-bg: #E1F5EE;
+    --teal-text: #0F6E56;
+    --purple-bg: #EEEDFE;
+    --purple-text: #3C3489;
+    --coral-bg: #FAECE7;
+    --coral-text: #993C1D;
+    --mono: 'JetBrains Mono', monospace;
+    --serif: 'Fraunces', serif;
+    --sans: 'DM Sans', var(--font-sans);
+  }
+
+  body { font-family: var(--sans); color: var(--text); background: transparent; }
+
+  .doc-root { display: flex; gap: 0; min-height: 100vh; }
+
+  .sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    background: var(--card);
+    border-right: 0.5px solid var(--border);
+    padding: 1.5rem 0;
+  }
+
+  .sidebar-logo {
+    padding: 0 1rem 1.5rem;
+    border-bottom: 0.5px solid var(--border);
+    margin-bottom: 1rem;
+  }
+  .sidebar-logo .logo-title {
+    font-family: var(--serif);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .sidebar-logo .logo-sub {
+    font-size: 11px;
+    color: var(--hint);
+    margin-top: 2px;
+  }
+
+  .nav-section-label {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--hint);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.75rem 1rem 0.25rem;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 1rem;
+    font-size: 13px;
+    color: var(--muted);
+    cursor: pointer;
+    border-radius: 0;
+    transition: background 0.15s, color 0.15s;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+  }
+  .nav-item:hover { background: var(--color-background-secondary); color: var(--text); }
+  .nav-item.active { color: var(--accent-text); background: var(--accent-bg); font-weight: 500; }
+  .nav-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.5; flex-shrink: 0; }
+  .nav-item.active .nav-dot { opacity: 1; }
+
+  .content { flex: 1; overflow-y: auto; padding: 2rem 2.5rem; max-width: 900px; }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .section-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .section-eyebrow {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+  .section-title {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.2;
+  }
+  .section-desc { font-size: 14px; color: var(--muted); margin-top: 0.5rem; line-height: 1.6; }
+
+  h2 { font-family: var(--serif); font-size: 19px; font-weight: 600; margin: 2rem 0 0.75rem; color: var(--text); }
+  h3 { font-size: 14px; font-weight: 500; margin: 1.5rem 0 0.5rem; color: var(--text); }
+  p { font-size: 14px; line-height: 1.7; color: var(--muted); margin-bottom: 0.75rem; }
+  ul, ol { padding-left: 1.25rem; }
+  li { font-size: 14px; line-height: 1.7; color: var(--muted); margin-bottom: 0.25rem; }
+  strong { font-weight: 500; color: var(--text); }
+
+  .card {
+    background: var(--card);
+    border: 0.5px solid var(--border);
+    border-radius: var(--border-radius-lg);
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .card-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 0.5rem; }
+  .card-body { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 500;
+    margin-right: 4px;
+  }
+  .badge-blue { background: var(--accent-bg); color: var(--accent-text); }
+  .badge-green { background: var(--green-bg); color: var(--green-text); }
+  .badge-amber { background: var(--amber-bg); color: var(--amber-text); }
+  .badge-red { background: var(--red-bg); color: var(--red-text); }
+  .badge-teal { background: var(--teal-bg); color: var(--teal-text); }
+  .badge-purple { background: var(--purple-bg); color: var(--purple-text); }
+  .badge-coral { background: var(--coral-bg); color: var(--coral-text); }
+
+  .req-item {
+    display: flex;
+    gap: 12px;
+    padding: 0.75rem 0;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .req-item:last-child { border-bottom: none; }
+  .req-code { font-family: var(--mono); font-size: 11px; font-weight: 500; color: var(--accent-text); background: var(--accent-bg); padding: 2px 6px; border-radius: 4px; flex-shrink: 0; height: fit-content; margin-top: 2px; }
+  .req-text { font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .req-text strong { font-weight: 500; color: var(--text); }
+
+  pre {
+    background: var(--color-background-secondary);
+    border: 0.5px solid var(--border);
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+    overflow-x: auto;
+    margin: 0.75rem 0 1rem;
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  code {
+    font-family: var(--mono);
+    font-size: 12px;
+    background: var(--color-background-secondary);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--text);
+  }
+
+  .endpoint-block {
+    border: 0.5px solid var(--border);
+    border-radius: var(--border-radius-lg);
+    margin-bottom: 1rem;
+    overflow: hidden;
+  }
+  .endpoint-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0.75rem 1rem;
+    background: var(--color-background-secondary);
+    border-bottom: 0.5px solid var(--border);
+    cursor: pointer;
+  }
+  .method-badge { font-family: var(--mono); font-size: 11px; font-weight: 500; padding: 2px 7px; border-radius: 4px; }
+  .method-get { background: var(--green-bg); color: var(--green-text); }
+  .method-post { background: var(--accent-bg); color: var(--accent-text); }
+  .method-put { background: var(--amber-bg); color: var(--amber-text); }
+  .method-patch { background: var(--teal-bg); color: var(--teal-text); }
+  .method-delete { background: var(--red-bg); color: var(--red-text); }
+  .endpoint-path { font-family: var(--mono); font-size: 13px; color: var(--text); }
+  .endpoint-desc { font-size: 12px; color: var(--hint); margin-left: auto; }
+  .endpoint-body { padding: 1rem; }
+
+  .grid-2 { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 1rem; margin-bottom: 1rem; }
+
+  .rule-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 0.75rem;
+    background: var(--color-background-secondary);
+    border-radius: var(--border-radius-md);
+    margin-bottom: 0.5rem;
+  }
+  .rule-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+  .rule-text { font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .rule-text strong { font-weight: 500; color: var(--text); }
+
+  .status-flow {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: wrap;
+    margin: 1rem 0;
+  }
+  .status-node {
+    padding: 5px 12px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .status-arrow { font-size: 14px; color: var(--hint); padding: 0 6px; }
+
+  .folder-tree {
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.8;
+    color: var(--muted);
+    background: var(--color-background-secondary);
+    border: 0.5px solid var(--border);
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+  }
+  .folder-tree .dir { color: var(--text); font-weight: 500; }
+  .folder-tree .file { color: var(--muted); }
+  .folder-tree .comment { color: var(--hint); }
+
+  .roadmap-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .roadmap-item:last-child { border-bottom: none; }
+  .roadmap-phase { width: 60px; flex-shrink: 0; }
+  .phase-label { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--hint); }
+  .phase-name { font-size: 13px; font-weight: 500; color: var(--text); margin-top: 2px; }
+
+  .table-wrapper { overflow-x: auto; margin: 1rem 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--hint); padding: 8px 12px; text-align: left; border-bottom: 0.5px solid var(--border); }
+  td { padding: 8px 12px; border-bottom: 0.5px solid var(--border); color: var(--muted); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  td code { font-size: 11px; }
+
+  .tip-box {
+    border-left: 2px solid var(--accent);
+    background: var(--accent-bg);
+    padding: 0.75rem 1rem;
+    border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;
+    margin: 1rem 0;
+  }
+  .tip-box p { color: var(--accent-text); font-size: 13px; margin: 0; }
+  .tip-box strong { color: var(--accent-text); }
+
+  .warn-box {
+    border-left: 2px solid #BA7517;
+    background: var(--amber-bg);
+    padding: 0.75rem 1rem;
+    border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;
+    margin: 1rem 0;
+  }
+  .warn-box p { color: var(--amber-text); font-size: 13px; margin: 0; }
+</style>
+
+<div class="doc-root">
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-title">SaaS Sorveteria<br>& Pizzaria</div>
+      <div class="logo-sub">Documentação Técnica v1.0</div>
+    </div>
+
+    <div class="nav-section-label">Visão Geral</div>
+    <button class="nav-item active" onclick="show('minimundo')"><span class="nav-dot"></span>Minimundo</button>
+    <button class="nav-item" onclick="show('rf')"><span class="nav-dot"></span>Req. Funcionais</button>
+    <button class="nav-item" onclick="show('rnf')"><span class="nav-dot"></span>Req. Não Funcionais</button>
+
+    <div class="nav-section-label">Dados</div>
+    <button class="nav-item" onclick="show('db')"><span class="nav-dot"></span>Banco de Dados</button>
+    <button class="nav-item" onclick="show('ddl')"><span class="nav-dot"></span>DDL (SQL)</button>
+
+    <div class="nav-section-label">Backend</div>
+    <button class="nav-item" onclick="show('arch')"><span class="nav-dot"></span>Arquitetura</button>
+    <button class="nav-item" onclick="show('api')"><span class="nav-dot"></span>API Endpoints</button>
+
+    <div class="nav-section-label">Produto</div>
+    <button class="nav-item" onclick="show('rules')"><span class="nav-dot"></span>Regras de Negócio</button>
+    <button class="nav-item" onclick="show('tech')"><span class="nav-dot"></span>Sugestões Técnicas</button>
+    <button class="nav-item" onclick="show('roadmap')"><span class="nav-dot"></span>Roadmap</button>
+  </nav>
+
+  <main class="content">
+
+    <!-- MINIMUNDO -->
+    <section id="minimundo" class="section active">
+      <div class="section-header">
+        <div class="section-eyebrow">Seção 1</div>
+        <div class="section-title">Minimundo</div>
+        <div class="section-desc">Descrição do domínio do problema e contexto do negócio</div>
+      </div>
+
+      <p>Uma sorveteria/pizzaria de bairro deseja digitalizar seu processo de pedidos, que hoje acontece por telefone. O estabelecimento possui um cardápio de produtos (sorvetes, pizzas e complementos) que precisam ser exibidos online para que clientes possam fazer pedidos sem sair de casa.</p>
+
+      <p>O cliente acessa o sistema pelo navegador, navega pelo cardápio, monta seu pedido, informa seus dados de entrega e finaliza. Nenhum cadastro ou login é necessário — a experiência deve ser simples e rápida. O acompanhamento do status é feito no próprio navegador via <code>localStorage</code>.</p>
+
+      <p>Do lado do estabelecimento, um ou mais funcionários acessam uma área administrativa protegida por senha onde visualizam os pedidos em tempo real, atualizam seus status e obtêm as informações necessárias para preparo e entrega. Não há integração com meios de pagamento no MVP — todos os pagamentos ocorrem na entrega.</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">Atores do Sistema</div>
+          <div class="card-body">
+            <p style="margin-bottom:0.5rem"><strong>Cliente</strong> — acesso público, sem autenticação. Visualiza cardápio e faz pedidos.</p>
+            <p style="margin-bottom:0"><strong>Administrador / Funcionário</strong> — acesso autenticado via JWT. Gerencia pedidos e visualiza operação.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Escopo do MVP</div>
+          <div class="card-body">
+            <p style="margin-bottom:0.5rem">Cardápio público, realização de pedidos, acompanhamento por <code>localStorage</code>, painel admin com gestão de status.</p>
+            <p style="margin-bottom:0"><strong>Fora do escopo:</strong> gateway de pagamento, notificações push, login de cliente, analytics avançado.</p>
+          </div>
+        </div>
+      </div>
+
+      <h2>Fluxo do Cliente</h2>
+      <div class="status-flow">
+        <span class="status-node badge-blue">Acessa site</span>
+        <span class="status-arrow">→</span>
+        <span class="status-node badge-teal">Vê cardápio</span>
+        <span class="status-arrow">→</span>
+        <span class="status-node badge-teal">Monta pedido</span>
+        <span class="status-arrow">→</span>
+        <span class="status-node badge-teal">Informa dados</span>
+        <span class="status-arrow">→</span>
+        <span class="status-node badge-green">Finaliza</span>
+        <span class="status-arrow">→</span>
+        <span class="status-node badge-amber">Acompanha status</span>
+      </div>
+
+      <h2>Fluxo do Administrador</h2>
+      <div class="status-flow">
+        <span class="status-node badge-blue">Faz login</span>
+        <span class="status-arrow">→</span>
+        <span class="status-node badge-teal">Recebe JWT</span>
+        <span class="status-arrow">→</span>
+        <span class="status-node badge-teal">Vê pedidos</span>
+        <span class="status-arrow">→</span>
+        <span class="status-node badge-amber">Atualiza status</span>
+        <span class="status-arrow">→</span>
+        <span class="status-node badge-green">Imprime / Entrega</span>
+      </div>
+    </section>
+
+    <!-- RF -->
+    <section id="rf" class="section">
+      <div class="section-header">
+        <div class="section-eyebrow">Seção 2</div>
+        <div class="section-title">Requisitos Funcionais</div>
+        <div class="section-desc">Funcionalidades que o sistema deve obrigatoriamente oferecer</div>
+      </div>
+
+      <h2>Módulo: Cardápio (público)</h2>
+      <div class="card">
+        <div class="req-item"><span class="req-code">RF01</span><div class="req-text"><strong>Listar categorias:</strong> o sistema deve exibir as categorias disponíveis (ex: pizzas, sorvetes, bebidas).</div></div>
+        <div class="req-item"><span class="req-code">RF02</span><div class="req-text"><strong>Listar produtos por categoria:</strong> ao selecionar uma categoria, o sistema exibe os produtos com nome, descrição, preço e imagem (opcional).</div></div>
+        <div class="req-item"><span class="req-code">RF03</span><div class="req-text"><strong>Exibir disponibilidade:</strong> produtos marcados como indisponíveis não podem ser adicionados ao pedido e devem indicar visualmente essa condição.</div></div>
+      </div>
+
+      <h2>Módulo: Pedido (público)</h2>
+      <div class="card">
+        <div class="req-item"><span class="req-code">RF04</span><div class="req-text"><strong>Montar carrinho:</strong> o cliente pode adicionar, remover e alterar a quantidade de itens antes de finalizar.</div></div>
+        <div class="req-item"><span class="req-code">RF05</span><div class="req-text"><strong>Informar dados do cliente:</strong> nome completo, número de telefone e endereço de entrega são obrigatórios.</div></div>
+        <div class="req-item"><span class="req-code">RF06</span><div class="req-text"><strong>Selecionar forma de pagamento:</strong> o cliente escolhe entre Pix, Cartão ou Dinheiro. Se dinheiro, pode informar o valor para troco.</div></div>
+        <div class="req-item"><span class="req-code">RF07</span><div class="req-text"><strong>Finalizar pedido:</strong> ao confirmar, o pedido é registrado no banco com status <em>pendente</em> e o cliente recebe um identificador de rastreamento.</div></div>
+        <div class="req-item"><span class="req-code">RF08</span><div class="req-text"><strong>Acompanhar status:</strong> usando o ID armazenado em <code>localStorage</code>, o cliente pode consultar o status atual do pedido.</div></div>
+      </div>
+
+      <h2>Módulo: Administração (protegido)</h2>
+      <div class="card">
+        <div class="req-item"><span class="req-code">RF09</span><div class="req-text"><strong>Autenticação:</strong> o administrador faz login com e-mail e senha, recebendo um token JWT com expiração configurável.</div></div>
+        <div class="req-item"><span class="req-code">RF10</span><div class="req-text"><strong>Listar pedidos:</strong> o painel exibe todos os pedidos ordenados por data, com filtro por status.</div></div>
+        <div class="req-item"><span class="req-code">RF11</span><div class="req-text"><strong>Visualizar detalhes do pedido:</strong> nome do cliente, telefone, endereço, itens, total, forma de pagamento e valor de troco se aplicável.</div></div>
+        <div class="req-item"><span class="req-code">RF12</span><div class="req-text"><strong>Atualizar status do pedido:</strong> o admin pode avançar o status entre os estados definidos.</div></div>
+        <div class="req-item"><span class="req-code">RF13</span><div class="req-text"><strong>Gerenciar cardápio:</strong> CRUD de categorias e produtos (nome, descrição, preço, disponibilidade).</div></div>
+        <div class="req-item"><span class="req-code">RF14</span><div class="req-text"><strong>Imprimir pedido:</strong> o sistema oferece uma view de impressão com os dados completos do pedido formatados.</div></div>
+      </div>
+    </section>
+
+    <!-- RNF -->
+    <section id="rnf" class="section">
+      <div class="section-header">
+        <div class="section-eyebrow">Seção 3</div>
+        <div class="section-title">Requisitos Não Funcionais</div>
+        <div class="section-desc">Atributos de qualidade que definem como o sistema deve se comportar</div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title"><span class="badge badge-blue">RNF01</span> Performance</div>
+          <div class="card-body">Resposta da API em menos de 300ms para 95% das requisições. Cardápio com cache — leitura não deve bater no banco a cada request.</div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span class="badge badge-teal">RNF02</span> Escalabilidade</div>
+          <div class="card-body">Arquitetura serverless (Vercel/Railway) escala horizontalmente sob demanda, sem necessidade de provisionamento manual.</div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span class="badge badge-amber">RNF03</span> Segurança</div>
+          <div class="card-body">Senhas armazenadas com bcrypt (fator ≥12). JWTs assinados com HS256, expiração de 8h. Rate limiting nos endpoints públicos.</div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span class="badge badge-green">RNF04</span> Disponibilidade</div>
+          <div class="card-body">SLA mínimo de 99,5% via provedor gerenciado. Banco de dados com backup automático diário.</div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span class="badge badge-purple">RNF05</span> Usabilidade</div>
+          <div class="card-body">Interface responsiva (mobile-first). Fluxo de pedido concluível em menos de 2 minutos por um usuário leigo.</div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span class="badge badge-coral">RNF06</span> Manutenibilidade</div>
+          <div class="card-body">Código organizado em camadas (Clean Architecture). Cobertura de testes unitários ≥70% nas regras de negócio.</div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span class="badge badge-blue">RNF07</span> Rastreabilidade</div>
+          <div class="card-body">Logs estruturados (JSON) com ID de correlação por requisição. Integração com Sentry para erros de produção.</div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span class="badge badge-teal">RNF08</span> Conformidade</div>
+          <div class="card-body">LGPD: dados do cliente (nome, telefone, endereço) retidos por no máximo 90 dias após entrega, com possibilidade de deleção.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DB -->
+    <section id="db" class="section">
+      <div class="section-header">
+        <div class="section-eyebrow">Seção 4</div>
+        <div class="section-title">Modelagem do Banco de Dados</div>
+        <div class="section-desc">Entidades, relacionamentos e decisão arquitetural</div>
+      </div>
+
+      <div class="tip-box">
+        <p><strong>Banco escolhido: PostgreSQL</strong> — relacionamentos bem definidos (pedido → itens → produtos), transações ACID para integridade do pedido, suporte nativo a JSON para flexibilidade futura, e excelente suporte serverless via Supabase ou Neon (connection pooling via PgBouncer).</p>
+      </div>
+
+      <h2>Entidades</h2>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr><th>Tabela</th><th>Responsabilidade</th><th>Campos principais</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>categories</code></td><td>Agrupa os produtos do cardápio</td><td>id, name, slug, active, sort_order</td></tr>
+            <tr><td><code>products</code></td><td>Item individual do cardápio</td><td>id, category_id, name, description, price, image_url, available</td></tr>
+            <tr><td><code>orders</code></td><td>Cabeçalho do pedido</td><td>id, tracking_code, customer_name, phone, address, payment_method, change_amount, status, total, created_at</td></tr>
+            <tr><td><code>order_items</code></td><td>Itens do pedido (snapshot de preço)</td><td>id, order_id, product_id, product_name, unit_price, quantity, subtotal</td></tr>
+            <tr><td><code>admin_users</code></td><td>Usuários da área administrativa</td><td>id, name, email, password_hash, role, active, last_login</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Decisões de Design</h2>
+
+      <div class="rule-item"><span class="rule-icon">◆</span><div class="rule-text"><strong>Snapshot de preço em <code>order_items</code>:</strong> os campos <code>product_name</code> e <code>unit_price</code> são copiados do produto no momento do pedido. Assim, alterar o preço no cardápio não afeta pedidos anteriores — integridade histórica garantida.</div></div>
+      <div class="rule-item"><span class="rule-icon">◆</span><div class="rule-text"><strong><code>tracking_code</code> em <code>orders</code>:</strong> UUID ou código legível (ex: <code>PED-A3F9</code>) retornado ao cliente para acompanhar o status sem expor o ID interno.</div></div>
+      <div class="rule-item"><span class="rule-icon">◆</span><div class="rule-text"><strong>Normalização 3FN:</strong> <code>order_items</code> referencia <code>products</code> mas mantém cópia desnormalizada do preço. Isso é uma violação intencional e documentada para integridade histórica.</div></div>
+      <div class="rule-item"><span class="rule-icon">◆</span><div class="rule-text"><strong><code>change_amount</code> nullable:</strong> o valor do troco só existe quando <code>payment_method = 'cash'</code>. Reforçado por constraint <code>CHECK</code> no banco.</div></div>
+
+      <h2>Relacionamentos</h2>
+      <div class="card">
+        <div class="card-body">
+          <p style="margin-bottom:0.5rem"><strong>Category</strong> 1:N <strong>Product</strong> — uma categoria possui muitos produtos</p>
+          <p style="margin-bottom:0.5rem"><strong>Order</strong> 1:N <strong>OrderItem</strong> — um pedido possui muitos itens</p>
+          <p style="margin-bottom:0"><strong>Product</strong> 1:N <strong>OrderItem</strong> — um produto aparece em muitos itens (leitura, FK opcional para deleção lógica)</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- DDL -->
+    <section id="ddl" class="section">
+      <div class="section-header">
+        <div class="section-eyebrow">Seção 4b</div>
+        <div class="section-title">DDL — Create Tables</div>
+        <div class="section-desc">Scripts SQL prontos para produção com constraints e índices</div>
+      </div>
+
+<pre>-- Extensões necessárias
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
+-- Categorias do cardápio
+CREATE TABLE categories (
+  id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name        VARCHAR(100) NOT NULL,
+  slug        VARCHAR(100) NOT NULL UNIQUE,
+  active      BOOLEAN NOT NULL DEFAULT true,
+  sort_order  INTEGER NOT NULL DEFAULT 0,
+  created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- Produtos do cardápio
+CREATE TABLE products (
+  id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  category_id  UUID NOT NULL REFERENCES categories(id) ON DELETE RESTRICT,
+  name         VARCHAR(200) NOT NULL,
+  description  TEXT,
+  price        NUMERIC(10,2) NOT NULL CHECK (price >= 0),
+  image_url    TEXT,
+  available    BOOLEAN NOT NULL DEFAULT true,
+  created_at   TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at   TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX idx_products_category ON products(category_id);
+CREATE INDEX idx_products_available ON products(available);
+
+-- Status possíveis do pedido
+CREATE TYPE order_status AS ENUM (
+  'pending',
+  'confirmed',
+  'preparing',
+  'out_for_delivery',
+  'delivered',
+  'cancelled'
+);
+
+-- Formas de pagamento aceitas
+CREATE TYPE payment_method AS ENUM ('pix', 'card', 'cash');
+
+-- Pedidos
+CREATE TABLE orders (
+  id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  tracking_code   VARCHAR(20) NOT NULL UNIQUE,
+  customer_name   VARCHAR(200) NOT NULL,
+  phone           VARCHAR(20) NOT NULL,
+  address         TEXT NOT NULL,
+  payment_method  payment_method NOT NULL,
+  change_amount   NUMERIC(10,2),
+  status          order_status NOT NULL DEFAULT 'pending',
+  total           NUMERIC(10,2) NOT NULL CHECK (total > 0),
+  notes           TEXT,
+  created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+  -- Troco só faz sentido para pagamento em dinheiro
+  CONSTRAINT chk_change_cash ONLY CHECK (
+    (payment_method = 'cash') OR (change_amount IS NULL)
+  )
+);
+
+CREATE INDEX idx_orders_status ON orders(status);
+CREATE INDEX idx_orders_tracking ON orders(tracking_code);
+CREATE INDEX idx_orders_created_at ON orders(created_at DESC);
+
+-- Itens do pedido (snapshot imutável)
+CREATE TABLE order_items (
+  id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  order_id      UUID NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+  product_id    UUID REFERENCES products(id) ON DELETE SET NULL,
+  product_name  VARCHAR(200) NOT NULL,  -- snapshot
+  unit_price    NUMERIC(10,2) NOT NULL, -- snapshot
+  quantity      INTEGER NOT NULL CHECK (quantity > 0),
+  subtotal      NUMERIC(10,2) NOT NULL
+);
+
+CREATE INDEX idx_order_items_order ON order_items(order_id);
+
+-- Usuários administrativos
+CREATE TABLE admin_users (
+  id             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name           VARCHAR(200) NOT NULL,
+  email          VARCHAR(255) NOT NULL UNIQUE,
+  password_hash  TEXT NOT NULL,
+  role           VARCHAR(50) NOT NULL DEFAULT 'staff',
+  active         BOOLEAN NOT NULL DEFAULT true,
+  last_login     TIMESTAMPTZ,
+  created_at     TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);</pre>
+
+      <div class="warn-box">
+        <p><strong>Atenção:</strong> nunca armazene a senha em texto puro. O campo <code>password_hash</code> deve receber o resultado de <code>bcrypt.hashpw(password, bcrypt.gensalt(rounds=12))</code>. A aplicação é responsável pelo hash — o banco nunca vê a senha original.</p>
+      </div>
+    </section>
+
+    <!-- ARCH -->
+    <section id="arch" class="section">
+      <div class="section-header">
+        <div class="section-eyebrow">Seção 5a</div>
+        <div class="section-title">Arquitetura do Backend</div>
+        <div class="section-desc">Estrutura de pastas e padrão arquitetural adotado</div>
+      </div>
+
+      <div class="tip-box">
+        <p><strong>Padrão: Clean Architecture (simplificada)</strong> — separação explícita entre domínio, casos de uso, infraestrutura e apresentação. Permite trocar banco ou framework sem reescrever regras de negócio.</p>
+      </div>
+
+      <div class="folder-tree">
+<span class="dir">app/</span>
+├── <span class="dir">domain/</span>                  <span class="comment"># Entidades e regras puras</span>
+│   ├── entities/
+│   │   ├── order.py
+│   │   ├── product.py
+│   │   └── admin_user.py
+│   └── exceptions.py           <span class="comment"># DomainException, etc</span>
+│
+├── <span class="dir">use_cases/</span>                <span class="comment"># Orquestração da lógica</span>
+│   ├── orders/
+│   │   ├── create_order.py
+│   │   ├── get_order_status.py
+│   │   └── update_order_status.py
+│   ├── menu/
+│   │   └── get_menu.py
+│   └── auth/
+│       └── authenticate_admin.py
+│
+├── <span class="dir">infrastructure/</span>           <span class="comment"># Detalhes externos</span>
+│   ├── database/
+│   │   ├── connection.py       <span class="comment"># SQLAlchemy engine</span>
+│   │   ├── models.py           <span class="comment"># ORM models</span>
+│   │   └── repositories/
+│   │       ├── order_repo.py
+│   │       └── product_repo.py
+│   └── security/
+│       ├── jwt_handler.py
+│       └── password_hasher.py
+│
+├── <span class="dir">api/</span>                       <span class="comment"># Camada FastAPI</span>
+│   ├── v1/
+│   │   ├── public/
+│   │   │   ├── menu.py
+│   │   │   └── orders.py
+│   │   └── admin/
+│   │       ├── auth.py
+│   │       ├── orders.py
+│   │       └── products.py
+│   ├── dependencies.py         <span class="comment"># get_db, get_current_admin</span>
+│   └── schemas/                <span class="comment"># Pydantic request/response</span>
+│       ├── order_schemas.py
+│       └── product_schemas.py
+│
+├── <span class="dir">core/</span>
+│   ├── config.py               <span class="comment"># Settings (pydantic-settings)</span>
+│   └── logging.py              <span class="comment"># Structured logging setup</span>
+│
+└── main.py                     <span class="comment"># FastAPI app factory</span>
+      </div>
+
+      <h2>Camadas e Responsabilidades</h2>
+      <div class="rule-item"><span class="rule-icon">◆</span><div class="rule-text"><strong>domain/</strong> — entidades Python puras, sem dependência de FastAPI ou SQLAlchemy. Contém as regras de negócio que nunca mudam.</div></div>
+      <div class="rule-item"><span class="rule-icon">◆</span><div class="rule-text"><strong>use_cases/</strong> — orquestra domínio e infraestrutura. Um caso de uso por funcionalidade. Testável sem banco real.</div></div>
+      <div class="rule-item"><span class="rule-icon">◆</span><div class="rule-text"><strong>infrastructure/</strong> — implementações concretas: SQLAlchemy, bcrypt, PyJWT. Repositórios abstraem o banco.</div></div>
+      <div class="rule-item"><span class="rule-icon">◆</span><div class="rule-text"><strong>api/</strong> — routers FastAPI, schemas Pydantic, injeção de dependências. Apenas converte HTTP ↔ use cases.</div></div>
+    </section>
+
+    <!-- API -->
+    <section id="api" class="section">
+      <div class="section-header">
+        <div class="section-eyebrow">Seção 5b</div>
+        <div class="section-title">API Endpoints</div>
+        <div class="section-desc">Contratos REST para cliente público e área administrativa</div>
+      </div>
+
+      <h2>Endpoints Públicos <span class="badge badge-green">sem auth</span></h2>
+
+      <div class="endpoint-block">
+        <div class="endpoint-header">
+          <span class="method-badge method-get">GET</span>
+          <span class="endpoint-path">/api/v1/menu</span>
+          <span class="endpoint-desc">Cardápio completo com categorias e produtos</span>
+        </div>
+        <div class="endpoint-body">
+          <p style="font-size:13px;margin-bottom:0.5rem">Retorna todas as categorias ativas com seus produtos disponíveis. Resposta cacheável (Cache-Control: max-age=60).</p>
+<pre>{
+  "categories": [
+    {
+      "id": "uuid",
+      "name": "Pizzas",
+      "slug": "pizzas",
+      "products": [
+        {
+          "id": "uuid",
+          "name": "Margherita",
+          "description": "Molho, mussarela e manjericão",
+          "price": 42.90,
+          "available": true
+        }
+      ]
+    }
+  ]
+}</pre>
+        </div>
+      </div>
+
+      <div class="endpoint-block">
+        <div class="endpoint-header">
+          <span class="method-badge method-post">POST</span>
+          <span class="endpoint-path">/api/v1/orders</span>
+          <span class="endpoint-desc">Criar novo pedido</span>
+        </div>
+        <div class="endpoint-body">
+<pre>// Request
+{
+  "customer_name": "Maria Silva",
+  "phone": "31998887766",
+  "address": "Rua das Flores, 42 - Apto 3",
+  "payment_method": "cash",
+  "change_amount": 100.00,
+  "notes": "Sem cebola na pizza",
+  "items": [
+    { "product_id": "uuid", "quantity": 1 },
+    { "product_id": "uuid", "quantity": 2 }
+  ]
+}
+
+// Response 201 Created
+{
+  "order_id": "uuid",
+  "tracking_code": "PED-A3F9",
+  "status": "pending",
+  "total": 85.80,
+  "created_at": "2024-01-15T20:30:00Z"
+}</pre>
+        </div>
+      </div>
+
+      <div class="endpoint-block">
+        <div class="endpoint-header">
+          <span class="method-badge method-get">GET</span>
+          <span class="endpoint-path">/api/v1/orders/{tracking_code}/status</span>
+          <span class="endpoint-desc">Consultar status pelo código de rastreio</span>
+        </div>
+        <div class="endpoint-body">
+<pre>// Response 200
+{
+  "tracking_code": "PED-A3F9",
+  "status": "preparing",
+  "updated_at": "2024-01-15T20:45:00Z"
+}</pre>
+        </div>
+      </div>
+
+      <h2>Endpoints Administrativos <span class="badge badge-amber">JWT obrigatório</span></h2>
+
+      <div class="endpoint-block">
+        <div class="endpoint-header">
+          <span class="method-badge method-post">POST</span>
+          <span class="endpoint-path">/api/v1/admin/auth/login</span>
+          <span class="endpoint-desc">Autenticação do administrador</span>
+        </div>
+        <div class="endpoint-body">
+<pre>// Request
+{ "email": "admin@pizzaria.com", "password": "senha123" }
+
+// Response 200
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIs...",
+  "token_type": "bearer",
+  "expires_in": 28800
+}</pre>
+        </div>
+      </div>
+
+      <div class="endpoint-block">
+        <div class="endpoint-header">
+          <span class="method-badge method-get">GET</span>
+          <span class="endpoint-path">/api/v1/admin/orders</span>
+          <span class="endpoint-desc">Listar pedidos com filtros</span>
+        </div>
+        <div class="endpoint-body">
+          <p style="font-size:13px;margin-bottom:0.5rem">Query params: <code>status</code>, <code>date</code>, <code>page</code>, <code>limit</code></p>
+<pre>// Response 200
+{
+  "total": 42,
+  "page": 1,
+  "items": [
+    {
+      "id": "uuid",
+      "tracking_code": "PED-A3F9",
+      "customer_name": "Maria Silva",
+      "status": "pending",
+      "total": 85.80,
+      "payment_method": "cash",
+      "created_at": "2024-01-15T20:30:00Z"
+    }
+  ]
+}</pre>
+        </div>
+      </div>
+
+      <div class="endpoint-block">
+        <div class="endpoint-header">
+          <span class="method-badge method-patch">PATCH</span>
+          <span class="endpoint-path">/api/v1/admin/orders/{order_id}/status</span>
+          <span class="endpoint-desc">Atualizar status do pedido</span>
+        </div>
+        <div class="endpoint-body">
+<pre>// Request
+{ "status": "preparing" }
+
+// Response 200
+{ "id": "uuid", "status": "preparing", "updated_at": "..." }</pre>
+        </div>
+      </div>
+
+      <div class="endpoint-block">
+        <div class="endpoint-header">
+          <span class="method-badge method-put">PUT</span>
+          <span class="endpoint-path">/api/v1/admin/products/{product_id}</span>
+          <span class="endpoint-desc">Atualizar produto (preço, disponibilidade)</span>
+        </div>
+        <div class="endpoint-body">
+<pre>// Request
+{
+  "name": "Margherita Grande",
+  "price": 48.90,
+  "available": false
+}
+
+// Response 200 — produto atualizado</pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- RULES -->
+    <section id="rules" class="section">
+      <div class="section-header">
+        <div class="section-eyebrow">Seção 6</div>
+        <div class="section-title">Regras de Negócio</div>
+        <div class="section-desc">Validações e restrições que o sistema deve enforçar</div>
+      </div>
+
+      <h2>Pedidos</h2>
+      <div class="rule-item"><span class="rule-icon">◆</span><div class="rule-text"><strong>Pedido não pode ser vazio:</strong> a lista de itens deve conter ao menos 1 item com quantidade ≥ 1.</div></div>
+      <div class="rule-item"><span class="rule-icon">◆</span><div class="rule-text"><strong>Produto disponível:</strong> apenas produtos com <code>available = true</code> podem ser adicionados ao pedido. Validação no use case, não somente no frontend.</div></div>
+      <div class="rule-item"><span class="rule-icon">◆</span><div class="rule-text"><strong>Forma de pagamento obrigatória:</strong> o campo <code>payment_method</code> é obrigatório e deve ser um dos valores permitidos (<code>pix</code>, <code>card</code>, <code>cash</code>).</div></div>
+      <div class="rule-item"><span class="rule-icon">◆</span><div class="rule-text"><strong>Troco exclusivo para dinheiro:</strong> <code>change_amount</code> só é aceito quando <code>payment_method = 'cash'</code>. Se informado para outro método, retorna 422. Se informado para dinheiro, deve ser ≥ ao total do pedido.</div></div>
+      <div class="rule-item"><span class="rule-icon">◆</span><div class="rule-text"><strong>Total calculado no backend:</strong> o frontend envia apenas os IDs e quantidades. O preço é lido do banco no momento do pedido — o cliente não envia o valor.</div></div>
+
+      <h2>Status do Pedido</h2>
+      <p>A transição de status segue uma máquina de estados linear. Não é permitido regredir ou pular etapas:</p>
+      <div class="status-flow" style="flex-wrap:wrap;gap:4px;margin:1rem 0">
+        <span class="status-node badge-amber">pending</span>
+        <span class="status-arrow">→</span>
+        <span class="status-node badge-blue">confirmed</span>
+        <span class="status-arrow">→</span>
+        <span class="status-node badge-purple">preparing</span>
+        <span class="status-arrow">→</span>
+        <span class="status-node badge-teal">out_for_delivery</span>
+        <span class="status-arrow">→</span>
+        <span class="status-node badge-green">delivered</span>
+      </div>
+      <p>De qualquer estado antes de <em>out_for_delivery</em>, é permitido ir para <strong>cancelled</strong>.</p>
+
+      <h2>Autenticação Admin</h2>
+      <div class="rule-item"><span class="rule-icon">◆</span><div class="rule-text"><strong>Lockout após falhas:</strong> após 5 tentativas de login incorretas em 10 minutos, bloquear temporariamente por 15 minutos (implementar via rate limiting + Redis ou solução simples com flag no banco).</div></div>
+      <div class="rule-item"><span class="rule-icon">◆</span><div class="rule-text"><strong>Expiração do token:</strong> tokens expiram em 8h. O frontend deve renovar via refresh token (pode ser implementado em fase 2) ou redirecionar para login.</div></div>
+
+      <h2>Cardápio</h2>
+      <div class="rule-item"><span class="rule-icon">◆</span><div class="rule-text"><strong>Produto com pedido pendente:</strong> um produto não pode ser deletado se existir em pedidos com status ativo. Use deleção lógica (<code>available = false</code>).</div></div>
+      <div class="rule-item"><span class="rule-icon">◆</span><div class="rule-text"><strong>Preço mínimo:</strong> o preço de um produto deve ser > 0.</div></div>
+    </section>
+
+    <!-- TECH -->
+    <section id="tech" class="section">
+      <div class="section-header">
+        <div class="section-eyebrow">Seção 7</div>
+        <div class="section-title">Sugestões Técnicas</div>
+        <div class="section-desc">Bibliotecas, estratégias serverless e observabilidade</div>
+      </div>
+
+      <h2>Stack Recomendada</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead><tr><th>Categoria</th><th>Biblioteca</th><th>Justificativa</th></tr></thead>
+          <tbody>
+            <tr><td>ORM</td><td><code>SQLAlchemy 2.x + asyncpg</code></td><td>ORM maduro, suporte async nativo, compatível com FastAPI</td></tr>
+            <tr><td>Migrations</td><td><code>Alembic</code></td><td>Versionamento de schema integrado ao SQLAlchemy</td></tr>
+            <tr><td>Autenticação</td><td><code>PyJWT + passlib[bcrypt]</code></td><td>Simples, sem dependências pesadas</td></tr>
+            <tr><td>Validação</td><td><code>Pydantic v2</code></td><td>Já incluso no FastAPI, validação e serialização</td></tr>
+            <tr><td>Config</td><td><code>pydantic-settings</code></td><td>Lê variáveis de ambiente com tipagem</td></tr>
+            <tr><td>Testes</td><td><code>pytest + httpx + pytest-asyncio</code></td><td>Suite completa para FastAPI async</td></tr>
+            <tr><td>Logs</td><td><code>structlog</code></td><td>Logs JSON estruturados, correlação por request</td></tr>
+            <tr><td>Erros</td><td><code>sentry-sdk</code></td><td>Captura de erros em produção com contexto</td></tr>
+            <tr><td>Rate limit</td><td><code>slowapi</code></td><td>Middleware de rate limiting para FastAPI</td></tr>
+            <tr><td>DB Serverless</td><td><code>Neon.tech</code> ou <code>Supabase</code></td><td>PostgreSQL serverless com connection pooling</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Serverless — Estratégias</h2>
+      <div class="rule-item"><span class="rule-icon">◆</span><div class="rule-text"><strong>Cold start:</strong> o maior problema do serverless Python. Mitigue mantendo o <code>requirements.txt</code> enxuto e usando <code>Mangum</code> como adapter (AWS Lambda) ou deploy direto no Railway/Render que mantém instâncias quentes.</div></div>
+      <div class="rule-item"><span class="rule-icon">◆</span><div class="rule-text"><strong>Connection pooling:</strong> banco serverless como Neon usa PgBouncer internamente. Não crie uma nova conexão por request — use <code>async_sessionmaker</code> do SQLAlchemy com pool gerenciado.</div></div>
+      <div class="rule-item"><span class="rule-icon">◆</span><div class="rule-text"><strong>Cache do cardápio:</strong> o menu muda raramente. Use <code>fastapi-cache2</code> com backend Redis (ou in-memory para MVP) com TTL de 60s. Invalide ao salvar produto.</div></div>
+
+      <h2>Observabilidade</h2>
+<pre># Exemplo de log estruturado com structlog
+import structlog
+log = structlog.get_logger()
+
+async def create_order(order_in: OrderCreate):
+    log.info("order.creating",
+             customer=order_in.customer_name,
+             items_count=len(order_in.items),
+             payment_method=order_in.payment_method)
+    # ...
+    log.info("order.created",
+             order_id=str(order.id),
+             tracking=order.tracking_code,
+             total=float(order.total))</pre>
+
+      <div class="tip-box">
+        <p><strong>Recomendação:</strong> use o plano gratuito do Sentry para produção. Configure um middleware no FastAPI que captura exceções não tratadas com o ID da request como tag — isso facilita rastrear bugs reportados pelo admin diretamente no painel.</p>
+      </div>
+    </section>
+
+    <!-- ROADMAP -->
+    <section id="roadmap" class="section">
+      <div class="section-header">
+        <div class="section-eyebrow">Seção 8</div>
+        <div class="section-title">Roadmap — Melhorias Futuras</div>
+        <div class="section-desc">Evolução planejada após a estabilização do MVP</div>
+      </div>
+
+      <div class="card">
+        <div class="roadmap-item">
+          <div class="roadmap-phase"><div class="phase-label">Fase 1</div><div class="phase-name">Pós-MVP</div></div>
+          <div>
+            <p style="margin-bottom:0.5rem"><strong>Notificações por WhatsApp</strong> via Twilio ou Evolution API — notificar o cliente quando o pedido sair para entrega. Alto impacto, implementação simples.</p>
+            <span class="badge badge-green">Alto valor</span> <span class="badge badge-teal">Baixa complexidade</span>
+          </div>
+        </div>
+        <div class="roadmap-item">
+          <div class="roadmap-phase"><div class="phase-label">Fase 2</div><div class="phase-name">Crescimento</div></div>
+          <div>
+            <p style="margin-bottom:0.5rem"><strong>Login do cliente</strong> — histórico de pedidos, favoritos, preenchimento automático de endereço. Adicionar tabela <code>customers</code> com autenticação por e-mail/OTP.</p>
+            <span class="badge badge-blue">Médio valor</span> <span class="badge badge-amber">Média complexidade</span>
+          </div>
+        </div>
+        <div class="roadmap-item">
+          <div class="roadmap-phase"><div class="phase-label">Fase 3</div><div class="phase-name">Monetização</div></div>
+          <div>
+            <p style="margin-bottom:0.5rem"><strong>Integração com gateway de pagamento</strong> — MercadoPago ou PagSeguro para Pix e cartão online. Elimina cobranças na entrega, reduz inadimplência.</p>
+            <span class="badge badge-blue">Alto valor</span> <span class="badge badge-red">Alta complexidade</span>
+          </div>
+        </div>
+        <div class="roadmap-item">
+          <div class="roadmap-phase"><div class="phase-label">Fase 4</div><div class="phase-name">Escala</div></div>
+          <div>
+            <p style="margin-bottom:0.5rem"><strong>Dashboard analítico</strong> — produtos mais pedidos, horário de pico, ticket médio, receita diária/semanal. Base para tomada de decisão do estabelecimento.</p>
+            <span class="badge badge-purple">Estratégico</span> <span class="badge badge-teal">Média complexidade</span>
+          </div>
+        </div>
+        <div class="roadmap-item">
+          <div class="roadmap-phase"><div class="phase-label">Fase 5</div><div class="phase-name">SaaS Real</div></div>
+          <div>
+            <p style="margin-bottom:0"><strong>Multi-tenant</strong> — o sistema passa a atender múltiplos estabelecimentos sob um único deploy, com isolamento por subdomínio (<code>pizzaria-xpto.seudominio.com.br</code>) e plano de assinatura mensal.</p>
+            <span class="badge badge-purple">Estratégico</span> <span class="badge badge-red">Alta complexidade</span>
+          </div>
+        </div>
+      </div>
+
+      <h2>Outros itens a considerar</h2>
+      <ul>
+        <li>Sistema de cupons de desconto para fidelização</li>
+        <li>Raio de entrega configurável com Google Maps</li>
+        <li>Impressão automática via ESC/POS (impressora térmica) ao receber pedido</li>
+        <li>App mobile para o entregador com status de rota</li>
+        <li>PWA para o cliente com notificações push nativas</li>
+      </ul>
+    </section>
+
+  </main>
+</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  document.querySelector('.content').scrollTop = 0;
+}
+</script>
