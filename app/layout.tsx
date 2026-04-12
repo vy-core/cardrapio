@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Açaiteria & Sorveteria Premium",
-  description: "Peça agora e receba em casa. O melhor açaí e gelatos artesanais da região com entrega rápida.",
+  title: "Açai & Cia",
+  description: "Peça agora e receba em casa. O melhor açaí e sorvete da região com entrega rápida!",
 };
 
 export default function RootLayout({
