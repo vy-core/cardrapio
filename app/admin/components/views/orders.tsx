@@ -36,7 +36,7 @@ export default function PedidosView() {
     };
 
     return (
-        <div className="flex-1 bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col lg:flex-row h-[70vh] lg:h-auto overflow-hidden">
+        <div className="flex-1 bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col lg:flex-row h-[70vh] lg:h-auto">
             {/* List of Orders */}
             <div className={cn(
                 "w-full lg:w-1/2 border-r border-gray-100 flex flex-col overflow-hidden",

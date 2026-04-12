@@ -9,9 +9,14 @@ export default function ProductsMonthly() {
     const [options, setOptions] = useState<AgChartOptions>({
         title: {
             text: "Vendas por Categoria",
+            fontFamily: "Arial",
+            spacing: 10,
+
         },
         subtitle: {
             text: "Em R$",
+            fontFamily: "Arial",
+            spacing: 10,
         },
         data: productsMonthlyData(),
         series: [
@@ -83,9 +88,13 @@ export function SalesByHour() {
     const [options, setOptions] = useState<AgChartOptions>({
         title: {
             text: "Vendas por Hora",
+            fontFamily: "Arial",
+            spacing: 10,
         },
         subtitle: {
             text: "Em R$",
+            fontFamily: "Arial",
+            spacing: 10,
         },
         data: salesByHourData(),
         series: [

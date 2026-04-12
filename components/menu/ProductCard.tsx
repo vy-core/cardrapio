@@ -39,7 +39,7 @@ export function ProductCard({ product }: ProductCardProps) {
 			)}
 
 			{/* Emoji placeholder styled with new colors */}
-			<div className="w-full h-32 rounded-2xl bg-gradient-to-br from-brand-50 to-cream-100 flex items-center justify-center text-5xl select-none shadow-sm">
+			<div className="w-full h-32 rounded-2xl bg-linear-to-br from-brand-50 to-cream-100 flex items-center justify-center text-5xl select-none shadow-sm">
 				{product.image_url ? (
 					<img src={product.image_url} alt={product.name} className="w-full h-full object-cover rounded-2xl" />
 				) : (

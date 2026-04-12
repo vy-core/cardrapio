@@ -99,7 +99,7 @@ export function CartDrawer() {
               ) : (
                 items.map((item) => (
                   <div key={item.product.id} className="flex items-start gap-4 p-4 rounded-2xl bg-white border border-brand-100/60 shadow-sm">
-                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-brand-50 to-brand-100 flex items-center justify-center text-2xl flex-shrink-0">
+                    <div className="w-14 h-14 rounded-xl bg-linear-to-br from-brand-50 to-brand-100 flex items-center justify-center text-2xl shrink-0">
                       {item.product.image_url ? (
                         <img src={item.product.image_url} alt={item.product.name} className="w-full h-full object-cover rounded-xl" />
                       ) : (
@@ -117,7 +117,7 @@ export function CartDrawer() {
                         <button onClick={() => updateQuantity(item.product.id, item.quantity + 1)} className="w-8 h-8 rounded-full bg-brand-600 flex items-center justify-center hover:bg-brand-700 transition-colors text-white">
                           <Plus className="w-3.5 h-3.5" />
                         </button>
-                        <button onClick={() => removeItem(item.product.id)} className="ml-auto p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors flex-shrink-0">
+                        <button onClick={() => removeItem(item.product.id)} className="ml-auto p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors shrink-0">
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
