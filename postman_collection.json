@@ -1,0 +1,361 @@
+{
+  "info": {
+    "name": "Acai e Cia API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8000"
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"login\": \"admin\",\n  \"senha\": \"senha\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Categoria",
+      "item": [
+        {
+          "name": "Listar",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/categoria/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categoria",
+                ""
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar por ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/categoria/{{categoriaId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categoria",
+                "{{categoriaId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Criar (protegido)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/categoria/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categoria",
+                ""
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Açaí\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Produto",
+      "item": [
+        {
+          "name": "Listar",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/produto/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "produto",
+                ""
+              ]
+            }
+          }
+        },
+        {
+          "name": "Criar (protegido)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/produto/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "produto",
+                ""
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Copo 300ml\",\n  \"preco\": 19.9,\n  \"descricao\": \"Açaí tradicional\",\n  \"image_url\": null,\n  \"categoria\": \"00000000-0000-0000-0000-000000000000\",\n  \"grupos_adicional\": [{\"id\": \"00000000-0000-0000-0000-000000000000\", \"required\": true, \"max_itens\": 3, \"min_itens\": 1}]\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Grupo adicional",
+      "item": [
+        {
+          "name": "Listar",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/grupo-adicional/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "grupo-adicional",
+                ""
+              ]
+            }
+          }
+        },
+        {
+          "name": "Criar (protegido)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/grupo-adicional/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "grupo-adicional",
+                ""
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Toppings\",\n  \"adicionais\": [\n    {\n      \"nome\": \"Leite em pó\",\n      \"preco\": 2.5,\n      \"image_url\": null\n    }\n  ]\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pedido",
+      "item": [
+        {
+          "name": "Criar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pedido/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pedido",
+                ""
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome_cliente\": \"Cliente\",\n  \"telefone\": \"11999999999\",\n  \"endereco\": \"Rua X\",\n  \"pagamento_entrega\": false,\n  \"observacao\": null,\n  \"forma_pagamento\": \"DINHEIRO\",\n  \"produtos\": [\n    {\n      \"id\": \"00000000-0000-0000-0000-000000000000\",\n      \"quantidade\": 1,\n      \"adicionais\": []\n    }\n  ]\n}"
+            }
+          }
+        },
+        {
+          "name": "Buscar por código",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/pedido/codigo/{{codigo}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pedido",
+                "codigo",
+                "{{codigo}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar (protegido)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pedido/",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pedido",
+                ""
+              ]
+            }
+          }
+        },
+        {
+          "name": "Status (protegido)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pedido/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pedido",
+                "status"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Alterar status (protegido)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pedido/change-status/{{pedidoId}}?status=PREPARACAO",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pedido",
+                "change-status",
+                "{{pedidoId}}"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "PREPARACAO"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Cancelar (cliente)",
+          "request": {
+            "method": "PATCH",
+            "url": {
+              "raw": "{{baseUrl}}/pedido/cancel?pedido={{pedidoId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pedido",
+                "cancel"
+              ],
+              "query": [
+                {
+                  "key": "pedido",
+                  "value": "{{pedidoId}}"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

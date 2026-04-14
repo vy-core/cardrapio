@@ -1,0 +1,60 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-04-14T00:00:00.000Z",
+  "__export_source": "cardrapio-api",
+  "resources": [
+    {
+      "_id": "wrk_cardrapio",
+      "_type": "workspace",
+      "name": "Acai e Cia API",
+      "description": "Coleção gerada (baseUrl/token)."
+    },
+    {
+      "_id": "env_base",
+      "_type": "environment",
+      "parentId": "wrk_cardrapio",
+      "name": "Base",
+      "data": {
+        "baseUrl": "http://localhost:8000",
+        "token": ""
+      }
+    },
+    {
+      "_id": "req_login",
+      "_type": "request",
+      "parentId": "wrk_cardrapio",
+      "name": "Auth - Login",
+      "method": "POST",
+      "url": "{{ _.baseUrl }}/auth/login",
+      "headers": [{ "name": "Content-Type", "value": "application/json" }],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"login\": \"admin\",\n  \"senha\": \"senha\"\n}"
+      }
+    },
+    {
+      "_id": "req_cat_list",
+      "_type": "request",
+      "parentId": "wrk_cardrapio",
+      "name": "Categoria - Listar",
+      "method": "GET",
+      "url": "{{ _.baseUrl }}/categoria/",
+      "headers": []
+    },
+    {
+      "_id": "req_cat_create",
+      "_type": "request",
+      "parentId": "wrk_cardrapio",
+      "name": "Categoria - Criar (protegido)",
+      "method": "POST",
+      "url": "{{ _.baseUrl }}/categoria/",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" },
+        { "name": "Authorization", "value": "{{ _.token }}" }
+      ],
+      "body": { "mimeType": "application/json", "text": "{\n  \"nome\": \"Açaí\"\n}" }
+    }
+  ]
+}
+
