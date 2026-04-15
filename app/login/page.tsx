@@ -5,11 +5,7 @@ import { useRouter } from "next/navigation";
 import { IceCream, Eye, EyeOff, LogIn } from "lucide-react";
 import { saveAdminToken } from "@/lib/cart-store";
 
-// Mock credentials: admin@sorveteria.com / admin123
-const MOCK_USERS = [
-  { email: "admin@sorveteria.com", password: "admin123", name: "Administrador" },
-  { email: "staff@sorveteria.com", password: "staff123", name: "Funcionário" },
-];
+import { login } from "@/lib/api";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -23,15 +19,16 @@ export default function AdminLoginPage() {
     e.preventDefault();
     setError("");
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 900));
-    const user = MOCK_USERS.find((u) => u.email === email && u.password === password);
-    if (user) {
-      saveAdminToken(`mock-jwt-${user.name}-${Date.now()}`);
+    
+    try {
+      const token = await login(email, password);
+      saveAdminToken(token);
       router.push("/admin");
-    } else {
-      setError("E-mail ou senha inválidos. Tente: admin@sorveteria.com / admin123");
+    } catch (err) {
+      setError("Login ou senha inválidos. Tente: admin / senha");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
@@ -50,13 +47,13 @@ export default function AdminLoginPage() {
         <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 flex flex-col gap-5">
           <form onSubmit={handleLogin} className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-gray-300">E-mail</label>
+              <label className="text-sm font-medium text-gray-300">Login</label>
               <input
-                type="email"
+                type="text"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@sorveteria.com"
+                placeholder="admin"
                 className="w-full px-4 py-2.5 rounded-xl bg-gray-800 border border-gray-700 text-white placeholder:text-gray-500 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-900 transition-all"
               />
             </div>
@@ -108,7 +105,7 @@ export default function AdminLoginPage() {
           <div className="border-t border-gray-800 pt-4">
             <p className="text-xs text-gray-500 text-center">
               Credenciais de demo:<br />
-              <span className="text-gray-400 font-mono">admin@sorveteria.com</span> / <span className="text-gray-400 font-mono">admin123</span>
+              <span className="text-gray-400 font-mono">admin</span> / <span className="text-gray-400 font-mono">senha</span>
             </p>
           </div>
         </div>

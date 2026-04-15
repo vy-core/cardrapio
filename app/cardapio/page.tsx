@@ -1,19 +1,34 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Header } from "@/components/menu/Header";
 import { CategoryTabs } from "@/components/menu/CategoryTabs";
 import { ProductCard } from "@/components/menu/ProductCard";
 import { CartDrawer } from "@/components/menu/CartDrawer";
-import { MOCK_CATEGORIES, MOCK_PRODUCTS } from "@/lib/mocks";
+import { getProducts, getCategories } from "@/lib/api";
+import type { Product, Category } from "@/types";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
 export default function MenuPage() {
 	const [activeCat, setActiveCat] = useState("");
 	const [query, setQuery] = useState("");
+	const [categories, setCategories] = useState<Category[]>([]);
+	const [allProducts, setAllProducts] = useState<Product[]>([]);
+	const [loading, setLoading] = useState(true);
 
-	const products = MOCK_PRODUCTS.filter((p) => {
+	useEffect(() => {
+		Promise.all([getCategories(), getProducts()]).then(([cats, prods]) => {
+			setCategories(cats);
+			setAllProducts(prods);
+			setLoading(false);
+		}).catch(err => {
+			console.error(err);
+			setLoading(false);
+		});
+	}, []);
+
+	const filteredProducts = allProducts.filter((p) => {
 		if (activeCat === "") {
 			if (!query.trim()) return true;
 			return p.name.toLowerCase().includes(query.toLowerCase());
@@ -23,13 +38,13 @@ export default function MenuPage() {
 		return inCat && p.name.toLowerCase().includes(query.toLowerCase());
 	});
 
-	const category = MOCK_CATEGORIES.find((c) => c.id === activeCat);
+	const category = categories.find((c) => c.id === activeCat);
 
 	return (
 		<div className="min-h-screen bg-surface-50 flex flex-col">
 			<Header />
 			<CategoryTabs
-				categories={MOCK_CATEGORIES}
+				categories={categories}
 				active={activeCat}
 				onChange={(id) => { setActiveCat(id); setQuery(""); }}
 			/>
@@ -39,11 +54,10 @@ export default function MenuPage() {
 				<div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
 					<div>
 						<h2 className="font-sans text-[22px] font-bold text-gray-900 flex items-center gap-2">
-							<span className="text-2xl">{category?.emoji}</span>
-							{category?.name}
+							{category?.name || "Todos os Produtos"}
 						</h2>
 						<p className="text-[14px] text-gray-500 font-medium mt-1">
-							{MOCK_PRODUCTS.filter((p) => p.category === activeCat && p.available || activeCat === "").length} itens disponíveis
+							{allProducts.filter((p) => p.category === activeCat && p.available || activeCat === "").length} itens disponíveis
 						</p>
 					</div>
 
@@ -60,7 +74,12 @@ export default function MenuPage() {
 				</div>
 
 				{/* Grid */}
-				{products.length === 0 ? (
+				{loading ? (
+					<div className="text-center py-24 text-gray-400 bg-white rounded-3xl border border-gray-100 shadow-sm mx-auto">
+						<div className="w-8 h-8 border-4 border-brand-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+						<p className="font-bold text-gray-800 text-lg">Carregando...</p>
+					</div>
+				) : filteredProducts.length === 0 ? (
 					<div className="text-center py-24 text-gray-400 bg-white rounded-3xl border border-gray-100 shadow-sm mx-auto">
 						<p className="text-5xl mb-4">🔍</p>
 						<p className="font-bold text-gray-800 text-lg">Nenhum produto encontrado</p>
@@ -68,7 +87,7 @@ export default function MenuPage() {
 					</div>
 				) : (
 					<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
-						{products.map((p, i) => (
+						{filteredProducts.map((p, i) => (
 							<div
 								key={p.id}
 								className="animate-slide-up h-full"

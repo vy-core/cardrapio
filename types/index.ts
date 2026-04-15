@@ -14,7 +14,6 @@ export interface Category {
   id: string;
   name: string;
   slug: string;
-  emoji: string;
   active: boolean;
   sort_order: number;
 }

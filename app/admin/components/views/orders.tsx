@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { MOCK_ORDERS } from "@/lib/mocks";
+import { getOrders } from "@/lib/api";
+import { getAdminToken } from "@/lib/cart-store";
 import { STATUS_LABELS, STATUS_COLORS, PAYMENT_LABELS, timeAgo, formatPrice, cn } from "@/lib/utils";
 import { ShoppingBag, MapPin, Phone, CreditCard, Clock, ChevronRight } from "lucide-react";
 import type { Order } from "@/types";
@@ -19,9 +20,21 @@ import {
 } from "@/components/ui/drawer";
 
 export default function PedidosView() {
-    const orders = MOCK_ORDERS;
+    const [orders, setOrders] = useState<Order[]>([]);
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
     const [isDesktop, setIsDesktop] = useState(true);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const token = getAdminToken() || "";
+        getOrders(token).then((data) => {
+            setOrders(data);
+            setLoading(false);
+        }).catch((err) => {
+            console.error(err);
+            setLoading(false);
+        });
+    }, []);
 
     // Track window resize to toggle between Drawer and Desktop Card
     useEffect(() => {
@@ -47,7 +60,9 @@ export default function PedidosView() {
                     <span className="bg-brand-100 font-bold text-brand-700 px-2.5 py-1 rounded-full text-xs">{orders.length} novos</span>
                 </div>
                 <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50/50">
-                    {orders.map((o) => (
+                    {loading ? (
+                        <div className="text-center py-10 text-gray-500 font-medium">Carregando pedidos...</div>
+                    ) : orders.map((o) => (
                         <button
                             key={o.id}
                             onClick={() => handleOrderClick(o)}

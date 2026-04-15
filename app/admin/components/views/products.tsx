@@ -1,8 +1,23 @@
 import { formatPrice } from "@/lib/utils";
 import ProductDialog from "../dialogs/product-dialog";
-import { MOCK_PRODUCTS } from "@/lib/mocks";
+import { getProducts } from "@/lib/api";
+import { useState, useEffect } from "react";
+import type { Product } from "@/types";
 
 export default function ProdutosView() {
+    const [products, setProducts] = useState<Product[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        getProducts().then((data) => {
+            setProducts(data);
+            setLoading(false);
+        }).catch((err) => {
+            console.error(err);
+            setLoading(false);
+        });
+    }, []);
+
     return (
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 overflow-hidden flex flex-col">
             <div className="flex items-center justify-between mb-6">
@@ -25,7 +40,11 @@ export default function ProdutosView() {
                         </tr>
                     </thead>
                     <tbody>
-                        {MOCK_PRODUCTS.slice(0, 7).map((p) => (
+                        {loading ? (
+                            <tr>
+                                <td colSpan={5} className="p-8 text-center text-gray-500 font-medium">Carregando produtos...</td>
+                            </tr>
+                        ) : products.slice(0, 7).map((p) => (
                             <tr key={p.id} className="border-b border-gray-50">
                                 <td className="p-4 pl-0">
                                     <p className="font-bold text-[14px] text-gray-900">{p.name}</p>
@@ -55,7 +74,7 @@ export default function ProdutosView() {
             </div>
             <div className="pt-4 mt-auto border-t border-gray-100 text-center">
                 <button className="text-sm font-bold text-gray-500 hover:text-gray-800 transition-colors">Exibir todos
-                    ({MOCK_PRODUCTS.length})</button>
+                    ({products.length})</button>
             </div>
         </div>
     );
