@@ -7,6 +7,7 @@ import { ProductCard } from "@/components/menu/ProductCard";
 import { CartDrawer } from "@/components/menu/CartDrawer";
 import { MOCK_CATEGORIES, MOCK_PRODUCTS } from "@/lib/mocks";
 import { Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 export default function MenuPage() {
 	const [activeCat, setActiveCat] = useState("");
@@ -42,18 +43,18 @@ export default function MenuPage() {
 							{category?.name}
 						</h2>
 						<p className="text-[14px] text-gray-500 font-medium mt-1">
-							{MOCK_PRODUCTS.filter((p) => p.category === activeCat && p.available).length} itens disponíveis
+							{MOCK_PRODUCTS.filter((p) => p.category === activeCat && p.available || activeCat === "").length} itens disponíveis
 						</p>
 					</div>
 
 					{/* Search */}
 					<div className="relative w-full sm:w-72">
 						<Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-						<input
+						<Input
 							value={query}
 							onChange={(e) => setQuery(e.target.value)}
 							placeholder="Buscar nesta categoria..."
-							className="w-full pl-10 pr-4 py-3 text-[14px] rounded-2xl border border-gray-200 bg-surface-100 outline-none focus:border-brand-500 focus:bg-white focus:ring-2 focus:ring-brand-100 transition-all shadow-sm"
+							className="w-full pl-10 pr-4 py-3 text-[14px]"
 						/>
 					</div>
 				</div>

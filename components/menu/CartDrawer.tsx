@@ -71,7 +71,14 @@ export function CartDrawer() {
 
 		text += `*Itens do Pedido:*\n`;
 		items.forEach((item) => {
-			text += `- ${item.quantity}x ${item.product.name} (${formatPrice(item.product.price * item.quantity)})\n`;
+			const itemToppingsPrice = item.selectedToppings?.reduce((sum, t) => sum + t.price, 0) || 0;
+			text += `- ${item.quantity}x ${item.product.name} (${formatPrice((item.product.price + itemToppingsPrice) * item.quantity)})\n`;
+			if (item.selectedToppings && item.selectedToppings.length > 0) {
+				text += `  Adicionais: ${item.selectedToppings.map(t => t.name).join(', ')}\n`;
+			}
+			if (item.observations) {
+				text += `  Obs: ${item.observations}\n`;
+			}
 		});
 
 		text += `\n*Total:* ${formatPrice(totalPrice)}\n`;
@@ -118,8 +125,8 @@ export function CartDrawer() {
 									</Button>
 								</div>
 							) : (
-								items.map((item) => (
-									<Card key={item.product.id} className="flex flex-row items-start gap-4 p-4 rounded-2xl bg-white border-brand-100/60 shadow-sm py-4 ring-0 overflow-visible">
+								items.map((item, index) => (
+									<Card key={item.id || `${item.product.id}-${index}`} className="flex flex-row items-start gap-4 p-4 rounded-2xl bg-white border-brand-100/60 shadow-sm py-4 ring-0 overflow-visible">
 										<div className="w-14 h-14 rounded-xl bg-linear-to-br from-brand-50 to-brand-100 flex items-center justify-center text-2xl shrink-0">
 											{item.product.image_url ? (
 												<img src={item.product.image_url} alt={item.product.name} className="w-full h-full object-cover rounded-xl" />
@@ -129,16 +136,26 @@ export function CartDrawer() {
 										</div>
 										<div className="flex-1 min-w-0 pt-0.5">
 											<p className="font-semibold text-gray-900 leading-tight">{item.product.name}</p>
-											<p className="text-[14px] text-brand-600 font-bold mt-1">{formatPrice(item.product.price * item.quantity)}</p>
+											{item.selectedToppings && item.selectedToppings.length > 0 && (
+												<p className="text-[13px] text-brand-600 mt-0.5 leading-snug">
+													+ {item.selectedToppings.map(t => t.name).join(', ')}
+												</p>
+											)}
+											{item.observations && (
+												<p className="text-[13px] text-gray-500 mt-0.5 line-clamp-2">{item.observations}</p>
+											)}
+											<p className="text-[14px] text-brand-600 font-bold mt-1">
+												{formatPrice((item.product.price + (item.selectedToppings?.reduce((sum, t) => sum + t.price, 0) || 0)) * item.quantity)}
+											</p>
 											<div className="flex items-center gap-1.5 mt-3">
-												<Button variant="outline" size="icon" onClick={() => updateQuantity(item.product.id, item.quantity - 1)} className="w-8 h-8 rounded-full bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100">
+												<Button variant="outline" size="icon" onClick={() => updateQuantity(item.id || item.product.id, item.quantity - 1)} className="w-8 h-8 rounded-full bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100">
 													<Minus className="w-3.5 h-3.5" />
 												</Button>
 												<span className="w-6 text-center text-[15px] font-bold text-gray-900">{item.quantity}</span>
-												<Button size="icon" onClick={() => updateQuantity(item.product.id, item.quantity + 1)} className="w-8 h-8 rounded-full bg-brand-600 hover:bg-brand-700 text-white">
+												<Button size="icon" onClick={() => updateQuantity(item.id || item.product.id, item.quantity + 1)} className="w-8 h-8 rounded-full bg-brand-600 hover:bg-brand-700 text-white">
 													<Plus className="w-3.5 h-3.5" />
 												</Button>
-												<Button variant="ghost" size="icon" onClick={() => removeItem(item.product.id)} className="ml-auto w-8 h-8 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full">
+												<Button variant="ghost" size="icon" onClick={() => removeItem(item.id || item.product.id)} className="ml-auto w-8 h-8 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full">
 													<Trash2 className="w-4 h-4" />
 												</Button>
 											</div>

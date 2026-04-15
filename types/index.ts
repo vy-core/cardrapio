@@ -32,9 +32,18 @@ export interface Product {
 
 // ─── Cart ────────────────────────────────────────────────────────────────────
 
+export interface Topping {
+  id: string;
+  name: string;
+  price: number;
+}
+
 export interface CartItem {
+  id: string;
   product: Product;
   quantity: number;
+  observations?: string;
+  selectedToppings?: Topping[];
 }
 
 // ─── Orders ──────────────────────────────────────────────────────────────────
