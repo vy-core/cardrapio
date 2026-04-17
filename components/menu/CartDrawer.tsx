@@ -74,7 +74,7 @@ export function CartDrawer() {
 			const itemToppingsPrice = item.selectedToppings?.reduce((sum, t) => sum + t.preco, 0) || 0;
 			text += `- ${item.quantity}x ${item.produto.nome} (${formatPrice((item.produto.preco + itemToppingsPrice) * item.quantity)})\n`;
 			if (item.selectedToppings && item.selectedToppings.length > 0) {
-				text += `  Adicionais: ${item.selectedToppings.map(t => t.name).join(', ')}\n`;
+				text += `  Adicionais: ${item.selectedToppings.map(t => t.nome).join(', ')}\n`;
 			}
 			if (item.observations) {
 				text += `  Obs: ${item.observations}\n`;
@@ -138,7 +138,7 @@ export function CartDrawer() {
 											<p className="font-semibold text-gray-900 leading-tight">{item.produto.nome}</p>
 											{item.selectedToppings && item.selectedToppings.length > 0 && (
 												<p className="text-[13px] text-brand-600 mt-0.5 leading-snug">
-													+ {item.selectedToppings.map(t => t.name).join(', ')}
+													+ {item.selectedToppings.map(t => t.nome).join(', ')}
 												</p>
 											)}
 											{item.observations && (
