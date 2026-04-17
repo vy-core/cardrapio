@@ -39,12 +39,11 @@ export default function GruposView() {
                         <CardHeader className="flex flex-row items-center justify-between">
                             <CardTitle className="font-bold text-xl">{grupo.nome}</CardTitle>
                             <GrupoDialog triggerName="Editar" grupo={grupo} />
-
                         </CardHeader>
-                        <Card>
+                        <Card className="gap-2">
                             {grupo.adicionais.map((adicional) => (
-                                <div className="flex justify-center w-full">
-                                    <div key={adicional.id} className="flex justify-around items-center gap-2 px-4 border-b pb-2 w-11/12">
+                                <div key={adicional.id} className="flex justify-center w-full">
+                                    <div className="flex justify-around border rounded-full border-brand-900/50 bg-brand-100 items-center gap-2 px-4 py-2 min-w-10/12">
                                         <p>{adicional.nome}</p>
                                         <p>{formatPrice(adicional.preco)}</p>
                                         <p className={adicional.disponivel ? "text-green-500" : "text-red-500"}>

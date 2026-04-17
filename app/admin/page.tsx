@@ -47,7 +47,7 @@ export default function AdminDashboardPage() {
 							{activeTab === "dashboard" && <DashboardView />}
 							{activeTab === "pedidos" && <PedidosView />}
 							{activeTab === "produtos" && <ProdutosView />}
-							{activeTab === "grupos" && <GruposView />}
+							{activeTab === "grupos adicionais" && <GruposView />}
 							{activeTab === "relatorios" && <BlankView title="Relatórios Financeiros" desc="Em breve: resumos em PDF e faturamento." />}
 							{activeTab === "analytics" && <BlankView title="Analytics" desc="Em breve: mapas de calor de vendas e horários de pico." />}
 						</div>
