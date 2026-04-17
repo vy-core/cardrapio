@@ -1,4 +1,4 @@
-import { Categoria, Produto as Produto, Order, OrderStatus, OrderItem } from "@/types";
+import { Categoria, Produto as Produto, Order, OrderStatus, OrderItem, GruposAdicionais, Grupo } from "@/types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://cardrapio-api-v2.vercel.app";
 
@@ -19,19 +19,6 @@ export interface ApiOrder {
 }
 
 // --- Requests ---
-export async function getCategories(): Promise<Categoria[]> {
-    const res = await fetch(`${API_URL}/categoria/`);
-    if (!res.ok) throw new Error("Failed to fetch categories");
-    const data: Categoria[] = await res.json();
-    return data;
-}
-
-export async function getProducts(): Promise<Produto[]> {
-    const res = await fetch(`${API_URL}/produto/`);
-    if (!res.ok) throw new Error("Failed to fetch products");
-    const data: Produto[] = await res.json();
-    return data;
-}
 
 export async function getOrders(token: string): Promise<Order[]> {
     const res = await fetch(`${API_URL}/pedido/`, {
@@ -43,6 +30,27 @@ export async function getOrders(token: string): Promise<Order[]> {
         return [];
     }
     const data: Order[] = await res.json();
+    return data;
+}
+
+export async function getProducts(): Promise<Produto[]> {
+    const res = await fetch(`${API_URL}/produto/`);
+    if (!res.ok) throw new Error("Failed to fetch products");
+    const data: Produto[] = await res.json();
+    return data;
+}
+
+export async function getGrupos() {
+    const res = await fetch(`${API_URL}/grupo-adicional/`);
+    if (!res.ok) throw new Error("Failed to fetch grupo-adicional");
+    const data: Grupo[] = await res.json();
+    return data;
+}
+
+export async function getCategories(): Promise<Categoria[]> {
+    const res = await fetch(`${API_URL}/categoria/`);
+    if (!res.ok) throw new Error("Failed to fetch categories");
+    const data: Categoria[] = await res.json();
     return data;
 }
 

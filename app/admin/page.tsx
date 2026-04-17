@@ -18,7 +18,7 @@ import ProdutosView from "./components/views/products";
 import PedidosView from "./components/views/orders";
 import DashboardView from "./components/views/dashboard";
 import { AdminTab } from "@/types";
-import CategoriasView from "./components/views/categories";
+import GruposView from "./components/views/groups";
 
 export default function AdminDashboardPage() {
 	const [activeTab, setActiveTab] = useState<AdminTab>("dashboard");
@@ -47,7 +47,7 @@ export default function AdminDashboardPage() {
 							{activeTab === "dashboard" && <DashboardView />}
 							{activeTab === "pedidos" && <PedidosView />}
 							{activeTab === "produtos" && <ProdutosView />}
-							{activeTab === "categorias" && <CategoriasView />}
+							{activeTab === "grupos" && <GruposView />}
 							{activeTab === "relatorios" && <BlankView title="Relatórios Financeiros" desc="Em breve: resumos em PDF e faturamento." />}
 							{activeTab === "analytics" && <BlankView title="Analytics" desc="Em breve: mapas de calor de vendas e horários de pico." />}
 						</div>

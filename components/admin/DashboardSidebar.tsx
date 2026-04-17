@@ -83,12 +83,12 @@ export function DashboardSidebar({ activeTab, setActiveTab, className }: Dashboa
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton
-                  isActive={activeTab === "categorias"}
-                  onClick={() => setActiveTab("categorias")}
-                  tooltip="Categorias"
+                  isActive={activeTab === "grupos"}
+                  onClick={() => setActiveTab("grupos")}
+                  tooltip="Grupos de Adicionais"
                 >
                   <Tags className="h-4 w-4" />
-                  <span>Categorias</span>
+                  <span>Grupos de Adicionais</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
