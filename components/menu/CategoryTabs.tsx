@@ -1,11 +1,11 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import type { Category } from "@/types";
+import type { Categoria } from "@/types";
 import { Button } from "../ui/button";
 
 interface CategoryTabsProps {
-	categories: Category[];
+	categories: Categoria[];
 	active: string;
 	onChange: (id: string) => void;
 }
@@ -27,7 +27,7 @@ export function CategoryTabs({ categories, active, onChange }: CategoryTabsProps
 							onClick={() => onChange(cat.id)}
 							variant={active === cat.id ? "default" : "outline"}
 						>
-							<span>{cat.name}</span>
+							<span>{cat.nome}</span>
 						</Button>
 					))}
 				</div>

@@ -1,23 +1,6 @@
-import { Category, Product, Order, OrderStatus } from "@/types";
+import { Categoria, Produto as Produto, Order, OrderStatus } from "@/types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://cardrapio-api-v2.vercel.app";
-
-// --- Types directly from API ---
-export interface ApiCategory {
-    id: string;
-    nome: string;
-}
-
-export interface ApiProduct {
-    id: string;
-    nome: string;
-    preco: number;
-    descricao: string;
-    image_url: string | null;
-    categoria: string;
-    // We are largely ignoring detalhes/grupos_adicional for local listing map, 
-    // but they can be passed if needed
-}
 
 export interface ApiOrder {
     id: string;
@@ -35,51 +18,30 @@ export interface ApiOrder {
     updated_at: string;
 }
 
-// --- Mappers ---
-function mapApiCategory(apiCat: ApiCategory, index: number): Category {
-    return {
-        id: apiCat.id,
-        name: apiCat.nome,
-        slug: apiCat.nome.toLowerCase().replace(/\s+/g, '-'),
-        active: true, // defaulting to true as API doesn't have it
-        sort_order: index + 1
-    };
-}
-
-function mapApiProduct(apiProd: ApiProduct): Product {
-    return {
-        id: apiProd.id,
-        name: apiProd.nome,
-        price: apiProd.preco,
-        description: apiProd.descricao,
-        image_url: apiProd.image_url || undefined,
-        category: apiProd.categoria,
-        available: true, // default wrapper
-        best_seller: false // default, maybe randomize or check later
-    };
-}
-
 // --- Requests ---
-export async function getCategories(): Promise<Category[]> {
+export async function getCategories(): Promise<Categoria[]> {
     const res = await fetch(`${API_URL}/categoria/`);
     if (!res.ok) throw new Error("Failed to fetch categories");
-    const data: ApiCategory[] = await res.json();
-    return data.map(mapApiCategory);
+    const data: Categoria[] = await res.json();
+    return data;
 }
 
-export async function getProducts(): Promise<Product[]> {
+export async function getProducts(): Promise<Produto[]> {
     const res = await fetch(`${API_URL}/produto/`);
     if (!res.ok) throw new Error("Failed to fetch products");
-    const data: ApiProduct[] = await res.json();
-    // Temporary logic: mark first 4 as best seller just for visual parity with mocks
-    return data.map((p, i) => ({ ...mapApiProduct(p), best_seller: i < 4 }));
+    const data: Produto[] = await res.json();
+    return data;
 }
 
 export async function getOrders(token: string): Promise<Order[]> {
     const res = await fetch(`${API_URL}/pedido/`, {
         headers: { "Authorization": token }
-    });
-    if (!res.ok) throw new Error("Failed to fetch orders");
+    }).catch(() => null);
+
+    if (!res || !res.ok) {
+        console.error("Failed to fetch orders:", res?.status);
+        return [];
+    }
     const data: ApiOrder[] = await res.json();
 
     // Simplistic mapping for now to keep the code compiling correctly. 

@@ -10,39 +10,61 @@ export type OrderStatus =
   | "delivered"
   | "cancelled";
 
-export interface Category {
+export interface Produto {
   id: string;
-  name: string;
-  slug: string;
-  active: boolean;
-  sort_order: number;
+  nome: string;
+  preco: number;
+  image_url: string;
+  created_at: string;
+  descricao: string;
+  disponivel: boolean;
+  categoria_id: string;
+  updated_at: string;
+  categoria: Categoria;
+  grupos_adicionais: GruposAdicionais[];
 }
 
-export interface Product {
+export interface Categoria {
   id: string;
-  category: string;
-  name: string;
-  description: string;
-  price: number;
-  image_url?: string;
-  available: boolean;
-  best_seller?: boolean;
+  nome: string;
+  created_at: string;
+  updated_at: string;
+  updated_by: string;
+}
+
+export interface GruposAdicionais {
+  id: string;
+  nome: string;
+  max_itens: number;
+  grupo_id: string;
+  required: boolean;
+  min_itens: number;
+  produto_id: string;
+  grupo: Grupo;
+}
+
+export interface Grupo {
+  id: string;
+  nome: string;
+  adicionais: Adicionais[];
+}
+
+export interface Adicionais {
+  id: string;
+  nome: string;
+  image_url: string;
+  preco: number;
+  disponivel: boolean;
 }
 
 // ─── Cart ────────────────────────────────────────────────────────────────────
 
-export interface Topping {
-  id: string;
-  name: string;
-  price: number;
-}
-
 export interface CartItem {
   id: string;
-  product: Product;
+  produto: Produto;
   quantity: number;
   observations?: string;
-  selectedToppings?: Topping[];
+  selectedToppings?: Adicionais[];
 }
 
 // ─── Orders ──────────────────────────────────────────────────────────────────

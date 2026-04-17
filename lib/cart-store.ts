@@ -2,24 +2,20 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { CartItem, Product, Topping } from "@/types";
+import type { CartItem, Produto, Adicionais } from "@/types";
 
 interface CartStore {
   items: CartItem[];
   isOpen: boolean;
 
   // Actions
-  addItem: (product: Product, quantity?: number, observations?: string, selectedToppings?: Topping[]) => void;
+  addItem: (product: Produto, quantity?: number, observations?: string, selectedToppings?: Adicionais[]) => void;
   removeItem: (itemId: string) => void;
   updateQuantity: (itemId: string, quantity: number) => void;
   clearCart: () => void;
   openCart: () => void;
   closeCart: () => void;
   toggleCart: () => void;
-
-  // Selectors
-  totalItems: () => number;
-  totalPrice: () => number;
 }
 
 export const useCartStore = create<CartStore>()(
@@ -28,11 +24,11 @@ export const useCartStore = create<CartStore>()(
       items: [],
       isOpen: false,
 
-      addItem: (product, quantity = 1, observations?: string, selectedToppings?: Topping[]) => {
+      addItem: (product, quantity = 1, observations?: string, selectedToppings?: Adicionais[]) => {
         set((state) => {
-          const existing = state.items.find((i) => 
-            i.product.id === product.id && 
-            i.observations === observations && 
+          const existing = state.items.find((i) =>
+            i.produto.id === product.id &&
+            i.observations === observations &&
             JSON.stringify(i.selectedToppings || []) === JSON.stringify(selectedToppings || [])
           );
           if (existing) {
@@ -44,7 +40,7 @@ export const useCartStore = create<CartStore>()(
               ),
             };
           }
-          return { items: [...state.items, { id: crypto.randomUUID(), product, quantity, observations, selectedToppings }] };
+          return { items: [...state.items, { id: crypto.randomUUID(), produto: product, quantity, observations, selectedToppings }] };
         });
       },
 
@@ -68,19 +64,21 @@ export const useCartStore = create<CartStore>()(
 
       clearCart: () => set({ items: [] }),
 
-      openCart:   () => set({ isOpen: true }),
-      closeCart:  () => set({ isOpen: false }),
+      openCart: () => set({ isOpen: true }),
+      closeCart: () => set({ isOpen: false }),
       toggleCart: () => set((s) => ({ isOpen: !s.isOpen })),
-
-      totalItems: () => get().items.reduce((acc, i) => acc + i.quantity, 0),
-      totalPrice: () =>
-        get().items.reduce((acc, i) => {
-          const toppingsPrice = i.selectedToppings?.reduce((sum, t) => sum + t.price, 0) || 0;
-          return acc + (i.product.price + toppingsPrice) * i.quantity;
-        }, 0),
     }),
-    { name: "sorveteria-cart" }
+    { name: "sorveteria-cart-v2" }
   )
+);
+
+export const useTotalItems = () => useCartStore((state) => state.items.reduce((acc, i) => acc + i.quantity, 0));
+
+export const useTotalPrice = () => useCartStore((state) =>
+  state.items.reduce((acc, i) => {
+    const toppingsPrice = i.selectedToppings?.reduce((sum, t) => sum + t.preco, 0) || 0;
+    return acc + (i.produto.preco + toppingsPrice) * i.quantity;
+  }, 0)
 );
 
 // ─── Order tracking (localStorage) ────────────────────────────────────────────

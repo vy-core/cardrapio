@@ -4,11 +4,11 @@ import Link from "next/link";
 import { ArrowRight, Star, Heart, CheckCircle2, ChevronRight, MapPin, UserCircle2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { getProducts } from "@/lib/api";
-import type { Product } from "@/types";
+import type { Produto } from "@/types";
 import { ProductCard } from "@/components/menu/ProductCard";
 
 export default function LandingPage() {
-	const [products, setProducts] = useState<Product[]>([]);
+	const [products, setProducts] = useState<Produto[]>([]);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
@@ -40,7 +40,7 @@ export default function LandingPage() {
 						</Link>
 					</div>
 					<Link
-						href="/admin"
+						href="/login"
 						className="bg-brand-500 hover:bg-brand-600 text-white px-4 py-2 rounded-full text-sm font-semibold transition-all shadow-md hover:shadow-lg whitespace-nowrap flex items-center gap-1"
 					>
 						<UserCircle2 className="h-4 w-4" />
@@ -103,7 +103,7 @@ export default function LandingPage() {
 						) : (
 							products.filter(p => p.best_seller == true).slice(0, 4).map((p) => (
 								<div key={p.id} className="pointer-events-none sm:pointer-events-auto">
-									<ProductCard product={p} />
+									<ProductCard produto={p} />
 								</div>
 							))
 						)}

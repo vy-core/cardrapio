@@ -2,15 +2,15 @@
 
 import { useState, useEffect } from "react";
 import { ChevronLeft, Info, ShoppingBag } from "lucide-react";
-import { useCartStore } from "@/lib/cart-store";
+import { useCartStore, useTotalItems, useTotalPrice } from "@/lib/cart-store";
 import { formatPrice } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "../ui/button";
 
 export function Header() {
-	const totalItems = useCartStore((s) => s.totalItems());
-	const totalPrice = useCartStore((s) => s.totalPrice());
+	const totalItems = useTotalItems();
+	const totalPrice = useTotalPrice();
 	const openCart = useCartStore((s) => s.openCart);
 	const pathname = usePathname();
 

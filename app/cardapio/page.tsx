@@ -6,15 +6,15 @@ import { CategoryTabs } from "@/components/menu/CategoryTabs";
 import { ProductCard } from "@/components/menu/ProductCard";
 import { CartDrawer } from "@/components/menu/CartDrawer";
 import { getProducts, getCategories } from "@/lib/api";
-import type { Product, Category } from "@/types";
+import type { Produto, Categoria } from "@/types";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
 export default function MenuPage() {
 	const [activeCat, setActiveCat] = useState("");
 	const [query, setQuery] = useState("");
-	const [categories, setCategories] = useState<Category[]>([]);
-	const [allProducts, setAllProducts] = useState<Product[]>([]);
+	const [categories, setCategories] = useState<Categoria[]>([]);
+	const [allProducts, setAllProducts] = useState<Produto[]>([]);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
@@ -31,11 +31,11 @@ export default function MenuPage() {
 	const filteredProducts = allProducts.filter((p) => {
 		if (activeCat === "") {
 			if (!query.trim()) return true;
-			return p.name.toLowerCase().includes(query.toLowerCase());
+			return p.nome.toLowerCase().includes(query.toLowerCase());
 		}
-		const inCat = p.category === activeCat;
+		const inCat = p.categoria_id === activeCat;
 		if (!query.trim()) return inCat;
-		return inCat && p.name.toLowerCase().includes(query.toLowerCase());
+		return inCat && p.nome.toLowerCase().includes(query.toLowerCase());
 	});
 
 	const category = categories.find((c) => c.id === activeCat);
@@ -54,10 +54,10 @@ export default function MenuPage() {
 				<div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
 					<div>
 						<h2 className="font-sans text-[22px] font-bold text-gray-900 flex items-center gap-2">
-							{category?.name || "Todos os Produtos"}
+							{category?.nome || "Todos os Produtos"}
 						</h2>
 						<p className="text-[14px] text-gray-500 font-medium mt-1">
-							{allProducts.filter((p) => p.category === activeCat && p.available || activeCat === "").length} itens disponíveis
+							{allProducts.filter((p) => p.categoria_id === activeCat && p.disponivel || activeCat === "").length} itens disponíveis
 						</p>
 					</div>
 
@@ -93,7 +93,7 @@ export default function MenuPage() {
 								className="animate-slide-up h-full"
 								style={{ animationDelay: `${i * 40}ms` }}
 							>
-								<ProductCard product={p} />
+								<ProductCard produto={p} />
 							</div>
 						))}
 					</div>

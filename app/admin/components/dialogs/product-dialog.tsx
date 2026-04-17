@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import type { Product } from "@/types";
+import type { Produto } from "@/types";
 import { useState } from "react";
 
 const categorias = [
@@ -24,19 +24,19 @@ const adicionais = [
 ]
 
 type ProductDialogProps = {
-    product?: Product;
-    onSubmit: (product: Product) => void;
+    produto?: Produto;
+    onSubmit: (product: Produto) => void;
     triggerName: string;
     triggerClassName?: string;
 }
-export default function ProductDialog({ product, onSubmit, triggerName, triggerClassName }: ProductDialogProps) {
+export default function ProductDialog({ produto, onSubmit, triggerName, triggerClassName }: ProductDialogProps) {
     const [open, setOpen] = useState(false);
-    const [name, setName] = useState(product?.name || "");
-    const [description, setDescription] = useState(product?.description || "");
-    const [price, setPrice] = useState(product?.price || 0);
-    const [image_url, setImageUrl] = useState(product?.image_url || "");
-    const [available, setAvailable] = useState<boolean>(product?.available ?? true);
-    const [category, setCategory] = useState(product?.category || "");
+    const [name, setName] = useState(produto?.nome || "");
+    const [description, setDescription] = useState(produto?.descricao || "");
+    const [price, setPrice] = useState(produto?.preco || 0);
+    const [image_url, setImageUrl] = useState(produto?.image_url || "");
+    const [available, setAvailable] = useState<boolean>(produto?.disponivel ?? true);
+    const [category, setCategory] = useState(produto?.categoria_id || "");
     const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
 
     // useEffect(() => {
@@ -57,7 +57,8 @@ export default function ProductDialog({ product, onSubmit, triggerName, triggerC
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // Handle form submission
+
+
     };
 
     return (
@@ -67,9 +68,9 @@ export default function ProductDialog({ product, onSubmit, triggerName, triggerC
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>{product ? "Editar Produto" : "Adicionar Produto"}</DialogTitle>
+                    <DialogTitle>{produto ? "Editar Produto" : "Adicionar Produto"}</DialogTitle>
                     <DialogDescription>
-                        {product ? "Atualize os detalhes do produto" : "Adicione um novo produto"}
+                        {produto ? "Atualize os detalhes do produto" : "Adicione um novo produto"}
                     </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -169,7 +170,7 @@ export default function ProductDialog({ product, onSubmit, triggerName, triggerC
                         <Button type="button" variant="outline" onClick={() => handleOpenChange(false)}>
                             Cancelar
                         </Button>
-                        <Button type="submit">{product ? "Atualizar" : "Adicionar"}</Button>
+                        <Button type="submit">{produto ? "Atualizar" : "Adicionar"}</Button>
                     </div>
                 </form>
             </DialogContent>

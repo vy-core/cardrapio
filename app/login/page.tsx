@@ -2,114 +2,142 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { IceCream, Eye, EyeOff, LogIn } from "lucide-react";
+import { IceCream, Eye, EyeOff, LogIn, ArrowLeft } from "lucide-react";
+import Link from "next/link";
 import { saveAdminToken } from "@/lib/cart-store";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 import { login } from "@/lib/api";
 
 export default function AdminLoginPage() {
-  const router = useRouter();
-  const [email, setEmail]       = useState("");
-  const [password, setPassword] = useState("");
-  const [showPwd, setShowPwd]   = useState(false);
-  const [loading, setLoading]   = useState(false);
-  const [error, setError]       = useState("");
+	const router = useRouter();
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [showPwd, setShowPwd] = useState(false);
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState("");
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
-    
-    try {
-      const token = await login(email, password);
-      saveAdminToken(token);
-      router.push("/admin");
-    } catch (err) {
-      setError("Login ou senha inválidos. Tente: admin / senha");
-    } finally {
-      setLoading(false);
-    }
-  };
+	const handleLogin = async (e: React.FormEvent) => {
+		e.preventDefault();
+		setError("");
+		setLoading(true);
 
-  return (
-    <div className="min-h-screen bg-gray-950 flex items-center justify-center px-4">
-      <div className="w-full max-w-sm">
-        {/* Logo */}
-        <div className="flex flex-col items-center mb-8">
-          <div className="w-14 h-14 rounded-2xl bg-brand-600 flex items-center justify-center shadow-warm-lg mb-4">
-            <IceCream className="w-8 h-8 text-white" />
-          </div>
-          <h1 className="font-display text-2xl font-semibold text-white">Área Administrativa</h1>
-          <p className="text-sm text-gray-400 mt-1">Gelato &amp; Pizza · Painel interno</p>
-        </div>
+		try {
+			const token = await login(email, password);
+			saveAdminToken(token);
+			router.push("/admin");
+		} catch (err) {
+			setError("Login ou senha inválidos. Tente: admin / senha");
+		} finally {
+			setLoading(false);
+		}
+	};
 
-        {/* Card */}
-        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 flex flex-col gap-5">
-          <form onSubmit={handleLogin} className="flex flex-col gap-4">
-            <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-gray-300">Login</label>
-              <input
-                type="text"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin"
-                className="w-full px-4 py-2.5 rounded-xl bg-gray-800 border border-gray-700 text-white placeholder:text-gray-500 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-900 transition-all"
-              />
+	return (
+		<main className="min-h-screen bg-cream-50 flex flex-col items-center justify-center p-4 relative overflow-hidden">
+			{/* Abstract Background Shapes */}
+			<div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+				<div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-cream-200/50 blur-[100px]" />
+				<div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-brand-100/50 blur-[120px]" />
+			</div>
+
+            {/* Back Button */}
+            <div className="absolute top-6 left-6 z-10">
+                <Link href="/">
+                    <Button variant="ghost" className="text-brand-700 hover:text-brand-900 hover:bg-brand-100/50 gap-2">
+                        <ArrowLeft className="w-4 h-4" />
+                        Voltar à Página Principal
+                    </Button>
+                </Link>
             </div>
 
-            <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-gray-300">Senha</label>
-              <div className="relative">
-                <input
-                  type={showPwd ? "text" : "password"}
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full px-4 py-2.5 pr-11 rounded-xl bg-gray-800 border border-gray-700 text-white placeholder:text-gray-500 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-900 transition-all"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPwd((v) => !v)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300 transition-colors"
-                >
-                  {showPwd ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
-              </div>
-            </div>
+			<div className="w-full max-w-sm z-10 relative animate-in fade-in slide-in-from-bottom-4 duration-500">
+				{/* Logo */}
+				<div className="flex flex-col items-center mb-8">
+					<div className="w-16 h-16 rounded-[2rem] bg-brand-600 flex items-center justify-center shadow-xl shadow-brand-500/20 mb-6 transform rotate-3 hover:rotate-6 transition-transform cursor-default">
+						<IceCream className="w-8 h-8 text-white -rotate-3" />
+					</div>
+					<h1 className="text-3xl font-black text-brand-900 tracking-tight">Área Restrita</h1>
+					<p className="text-brand-700 font-medium mt-1">Acesso administrativo</p>
+				</div>
 
-            {error && (
-              <p className="text-xs text-red-400 bg-red-950 border border-red-900 rounded-lg px-3 py-2">
-                {error}
-              </p>
-            )}
+				<Card className="border-cream-100 shadow-2xl bg-white/80 backdrop-blur-sm overflow-hidden">
+					<form onSubmit={handleLogin}>
+						<CardContent className="pt-6 pb-4 space-y-5">
+							<div className="space-y-2">
+								<Label htmlFor="email" className="text-brand-800 font-bold ml-1">Login</Label>
+								<Input
+									id="email"
+									type="text"
+									required
+									value={email}
+									onChange={(e) => setEmail(e.target.value)}
+									placeholder="admin"
+									className="bg-cream-50 border-cream-200 focus-visible:ring-brand-500 text-brand-900 rounded-2xl h-12 px-4 shadow-inner"
+								/>
+							</div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="flex items-center justify-center gap-2 w-full bg-brand-600 hover:bg-brand-700 disabled:opacity-60 text-white font-semibold py-3 rounded-xl transition-all mt-1"
-            >
-              {loading ? (
-                <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                </svg>
-              ) : (
-                <LogIn className="w-4 h-4" />
-              )}
-              {loading ? "Entrando..." : "Entrar"}
-            </button>
-          </form>
+							<div className="space-y-2">
+								<Label htmlFor="password" className="text-brand-800 font-bold ml-1">Senha</Label>
+								<div className="relative">
+									<Input
+										id="password"
+										type={showPwd ? "text" : "password"}
+										required
+										value={password}
+										onChange={(e) => setPassword(e.target.value)}
+										placeholder="••••••••"
+										className="bg-cream-50 border-cream-200 focus-visible:ring-brand-500 text-brand-900 rounded-2xl h-12 px-4 shadow-inner pr-11"
+									/>
+									<button
+										type="button"
+										onClick={() => setShowPwd((v) => !v)}
+										className="absolute right-3 top-1/2 -translate-y-1/2 text-brand-500 hover:text-brand-700 transition-colors p-1"
+									>
+										{showPwd ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+									</button>
+								</div>
+							</div>
 
-          <div className="border-t border-gray-800 pt-4">
-            <p className="text-xs text-gray-500 text-center">
-              Credenciais de demo:<br />
-              <span className="text-gray-400 font-mono">admin</span> / <span className="text-gray-400 font-mono">senha</span>
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+							{error && (
+								<div className="bg-destructive/10 text-destructive text-sm font-medium rounded-xl px-4 py-3 border border-destructive/20 animate-in fade-in zoom-in-95">
+									{error}
+								</div>
+							)}
+						</CardContent>
+						
+						<CardFooter className="flex flex-col gap-5 pb-6">
+							<Button
+								type="submit"
+								disabled={loading}
+								className="w-full bg-brand-600 hover:bg-brand-700 text-white rounded-full h-12 text-base font-bold shadow-lg shadow-brand-500/30 hover:shadow-brand-500/40 transition-all flex items-center justify-center gap-2"
+							>
+								{loading ? (
+									<svg className="animate-spin w-5 h-5 opacity-80" viewBox="0 0 24 24" fill="none">
+										<circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+										<path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+									</svg>
+								) : (
+									<LogIn className="w-5 h-5" />
+								)}
+								{loading ? "Autenticando..." : "Acessar Sistema"}
+							</Button>
+							
+							<div className="w-full border-t border-cream-200 pt-4 flex flex-col items-center">
+								<p className="text-xs text-brand-600/70 font-medium">Credenciais de demonstração</p>
+								<div className="flex items-center gap-2 mt-1">
+									<code className="bg-cream-100 text-brand-800 px-2 py-0.5 rounded font-mono text-xs">admin</code>
+									<span className="text-brand-400 text-xs">-</span>
+									<code className="bg-cream-100 text-brand-800 px-2 py-0.5 rounded font-mono text-xs">senha</code>
+								</div>
+							</div>
+						</CardFooter>
+					</form>
+				</Card>
+			</div>
+		</main>
+	);
 }

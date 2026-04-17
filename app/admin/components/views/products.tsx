@@ -2,10 +2,11 @@ import { formatPrice } from "@/lib/utils";
 import ProductDialog from "../dialogs/product-dialog";
 import { getProducts } from "@/lib/api";
 import { useState, useEffect } from "react";
-import type { Product } from "@/types";
+import type { Produto } from "@/types";
+import { Button } from "@/components/ui/button";
 
 export default function ProdutosView() {
-    const [products, setProducts] = useState<Product[]>([]);
+    const [products, setProducts] = useState<Produto[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -47,22 +48,22 @@ export default function ProdutosView() {
                         ) : products.slice(0, 7).map((p) => (
                             <tr key={p.id} className="border-b border-gray-50">
                                 <td className="p-4 pl-0">
-                                    <p className="font-bold text-[14px] text-gray-900">{p.name}</p>
-                                    <p className="text-xs font-semibold text-gray-500 mt-1 max-w-[200px] truncate">{p.description}
+                                    <p className="font-bold text-[14px] text-gray-900">{p.nome}</p>
+                                    <p className="text-xs font-semibold text-gray-500 mt-1 max-w-[200px] truncate">{p.descricao}
                                     </p>
                                 </td>
                                 <td className="p-4 text-sm font-semibold text-gray-600 capitalize">
-                                    {p.category.replace("cat-", "Categoria ")}
+                                    {p.categoria.nome}
                                 </td>
-                                <td className="p-4 text-sm font-semibold text-brand-700">{formatPrice(p.price)}</td>
+                                <td className="p-4 text-sm font-semibold text-brand-700">{formatPrice(p.preco)}</td>
                                 <td className="p-4 text-center">
                                     <span className={`inline-block px-3 py-1 text-[11px] font-bold uppercase rounded-full
-                            ${p.available ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                                        {p.available ? "Disponível" : "Esgotado"}
+                            ${p.disponivel ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                        {p.disponivel ? "Disponível" : "Esgotado"}
                                     </span>
                                 </td>
                                 <td className="p-4 text-right">
-                                    <ProductDialog product={p} onSubmit={(product) => console.log(product)}
+                                    <ProductDialog produto={p} onSubmit={(product) => console.log(product)}
                                         triggerName="Editar"
                                         triggerClassName="text-sm font-bold text-brand-600 hover:underline"
                                     />
@@ -73,8 +74,8 @@ export default function ProdutosView() {
                 </table>
             </div>
             <div className="pt-4 mt-auto border-t border-gray-100 text-center">
-                <button className="text-sm font-bold text-gray-500 hover:text-gray-800 transition-colors">Exibir todos
-                    ({products.length})</button>
+                <Button>Exibir todos
+                    ({products.length})</Button>
             </div>
         </div>
     );
