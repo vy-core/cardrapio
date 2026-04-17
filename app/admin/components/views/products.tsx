@@ -4,6 +4,7 @@ import { getProducts } from "@/lib/api";
 import { useState, useEffect } from "react";
 import type { Produto } from "@/types";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function ProdutosView() {
     const [products, setProducts] = useState<Produto[]>([]);
@@ -33,6 +34,7 @@ export default function ProdutosView() {
                 <table className="w-full text-left border-collapse min-w-[600px]">
                     <thead>
                         <tr className="border-b border-gray-200">
+                            <th className="font-bold text-xs uppercase p-4 md:p-2 pl-0"></th>
                             <th className="font-bold text-xs uppercase p-4 pl-0">Produto</th>
                             <th className="font-bold text-xs uppercase p-4">Categoria</th>
                             <th className="font-bold text-xs uppercase p-4">Preço</th>
@@ -47,6 +49,18 @@ export default function ProdutosView() {
                             </tr>
                         ) : products.slice(0, 7).map((p) => (
                             <tr key={p.id} className="border-b border-gray-50">
+                                <td className="p-4 md:p-2 pl-0">
+                                    <Avatar>
+                                        <AvatarImage
+                                            src={p.image_url || "/placeholder.jpg"}
+                                            alt={p.nome}
+                                            width={50}
+                                            height={50}
+                                            className="rounded-lg object-cover"
+                                        />
+                                        <AvatarFallback>{p.nome.charAt(0)}</AvatarFallback>
+                                    </Avatar>
+                                </td>
                                 <td className="p-4 pl-0">
                                     <p className="font-bold text-[14px] text-gray-900">{p.nome}</p>
                                     <p className="text-xs font-semibold text-gray-500 mt-1 max-w-[200px] truncate">{p.descricao}

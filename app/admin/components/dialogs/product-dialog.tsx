@@ -5,23 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import type { Produto } from "@/types";
-import { useState } from "react";
-
-const categorias = [
-    { label: "Açaí", value: "acai" },
-    { label: "Sorvete", value: "sorvete" },
-    { label: "Bebidas", value: "bebidas" },
-];
-
-const adicionais = [
-    { nome: "Leite Condensado", preco: 1.00 },
-    { nome: "Leite em Pó", preco: 1.00 },
-    { nome: "Granola", preco: 1.50 },
-    { nome: "Morango", preco: 2.00 },
-    { nome: "Chocolate", preco: 1.00 },
-    { nome: "Nutella", preco: 3.00 },
-]
+import { getCategories, getGrupos } from "@/lib/api";
+import type { Categoria, Grupo, Produto } from "@/types";
+import { useEffect, useState } from "react";
 
 type ProductDialogProps = {
     produto?: Produto;
@@ -30,26 +16,29 @@ type ProductDialogProps = {
     triggerClassName?: string;
 }
 export default function ProductDialog({ produto, onSubmit, triggerName, triggerClassName }: ProductDialogProps) {
+    const [allCategories, setAllCategories] = useState<Categoria[]>([]);
+    const [allGruposAdd, setAllGruposAdd] = useState<Grupo[]>([]);
     const [open, setOpen] = useState(false);
     const [name, setName] = useState(produto?.nome || "");
     const [description, setDescription] = useState(produto?.descricao || "");
     const [price, setPrice] = useState(produto?.preco || 0);
     const [image_url, setImageUrl] = useState(produto?.image_url || "");
     const [available, setAvailable] = useState<boolean>(produto?.disponivel ?? true);
-    const [category, setCategory] = useState(produto?.categoria_id || "");
+    const [category, setCategory] = useState(produto?.categoria || null);
     const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
 
-    // useEffect(() => {
-    //     if (product) {
-    //         setName(product.name);
-    //         setDescription(product.description);
-    //         setPrice(product.price);
-    //         setImageUrl(product.image_url);
-    //         setAvailable(product.available);
-    //         setCategoryId(product.category_id);
-    //         setSortOrder(product.sort_order);
-    //     }
-    // }, [product]);
+    useEffect(() => {
+        const fetchCategories = async () => {
+            const categories = await getCategories();
+            setAllCategories(categories);
+        };
+        const fetchGruposAdd = async () => {
+            const gruposAdd = await getGrupos();
+            setAllGruposAdd(gruposAdd);
+        };
+        fetchCategories();
+        fetchGruposAdd();
+    }, []);
 
     const handleOpenChange = (open: boolean) => {
         setOpen(open);
@@ -129,26 +118,26 @@ export default function ProductDialog({ produto, onSubmit, triggerName, triggerC
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="category_id" className="text-sm font-medium">Categoria</Label>
-                        <Select value={category} onValueChange={(val) => setCategory(val ?? "")}>
+                        <Select value={category?.nome}>
                             <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Selecione uma categoria" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
                                     <SelectLabel>Categoria</SelectLabel>
-                                    {categorias.map((item) => (
-                                        <SelectItem key={item.value} value={item.value}>
-                                            {item.label}
+                                    {allCategories.map((item) => (
+                                        <SelectItem key={item.id} value={item.id} onClick={() => setCategory(item)}>
+                                            {item.nome}
                                         </SelectItem>
                                     ))}
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
                     </div>
-                    <div className={`space-y-2 ${category === "acai" || category === "sorvete" ? "" : "hidden"}`}>
+                    <div className={"space-y-2"}>
                         <Label htmlFor="sort_order" className="text-sm font-medium">Selecionar Adicionais Disponíveis (Opcional)</Label>
-                        <div className="flex flex-wrap gap-2">
-                            {adicionais.map((item) => (
+                        <div className="grid grid-cols-3 gap-2">
+                            {allGruposAdd.length > 0 ? allGruposAdd.map((item) => (
                                 <div key={item.nome} className="flex items-center gap-2">
                                     <Checkbox
                                         id={item.nome}
@@ -163,7 +152,7 @@ export default function ProductDialog({ produto, onSubmit, triggerName, triggerC
                                     />
                                     <Label htmlFor={item.nome} className="text-sm font-medium">{item.nome}</Label>
                                 </div>
-                            ))}
+                            )) : <Input disabled placeholder="Nenhum adicional cadastrado no sistema." />}
                         </div>
                     </div>
                     <div className="flex justify-end gap-2">
