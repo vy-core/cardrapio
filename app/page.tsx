@@ -101,7 +101,7 @@ export default function LandingPage() {
 								Carregando...
 							</div>
 						) : (
-							products.filter(p => p.best_seller == true).slice(0, 4).map((p) => (
+							products.slice(0, 4).map((p) => (
 								<div key={p.id} className="pointer-events-none sm:pointer-events-auto">
 									<ProductCard produto={p} />
 								</div>

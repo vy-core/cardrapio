@@ -1,4 +1,4 @@
-import { Categoria, Produto as Produto, Order, OrderStatus } from "@/types";
+import { Categoria, Produto as Produto, Order, OrderStatus, OrderItem } from "@/types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://cardrapio-api-v2.vercel.app";
 
@@ -42,31 +42,8 @@ export async function getOrders(token: string): Promise<Order[]> {
         console.error("Failed to fetch orders:", res?.status);
         return [];
     }
-    const data: ApiOrder[] = await res.json();
-
-    // Simplistic mapping for now to keep the code compiling correctly. 
-    // Since we need to represent it as Order, we do the mapping.
-    return data.map(o => ({
-        id: o.id,
-        tracking_code: o.codigo,
-        customer_name: o.nome_cliente,
-        phone: o.telefone,
-        address: o.endereco,
-        payment_method: o.forma_pagamento === "DINHEIRO" ? "cash" : "pix", // simplified
-        status: (o.status.toLowerCase() as OrderStatus) || "pending",
-        total: o.total || 0,
-        items: (o.produtos || []).map(p => ({
-            id: p.id || Math.random().toString(),
-            order_id: o.id,
-            product_id: p.id,
-            product_name: "Produto", // if API gives us name, use it
-            unit_price: 0,
-            quantity: p.quantidade,
-            subtotal: 0
-        })),
-        created_at: o.created_at || new Date().toISOString(),
-        updated_at: o.updated_at || new Date().toISOString()
-    }));
+    const data: Order[] = await res.json();
+    return data;
 }
 
 export async function login(loginStr: string, senhaStr: string): Promise<string> {

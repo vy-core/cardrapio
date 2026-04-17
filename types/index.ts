@@ -104,6 +104,9 @@ export interface AdminUser {
   role: "owner" | "staff";
 }
 
+export type AdminTab = "dashboard" | "pedidos" | "produtos" | "categorias" | "relatorios" | "analytics";
+
+
 // ─── API Contracts ────────────────────────────────────────────────────────────
 
 export interface CreateOrderPayload {

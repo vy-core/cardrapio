@@ -22,12 +22,14 @@ import {
   LogOut,
   Settings,
   UserCircle2,
+  Tags,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { AdminTab } from "@/types";
 
 interface DashboardSidebarProps {
   activeTab: string;
-  setActiveTab: (tab: "dashboard" | "pedidos" | "produtos" | "relatorios" | "analytics") => void;
+  setActiveTab: (tab: AdminTab) => void;
   className?: string;
 }
 
@@ -77,6 +79,16 @@ export function DashboardSidebar({ activeTab, setActiveTab, className }: Dashboa
                 >
                   <Store className="h-4 w-4" />
                   <span>Produtos</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  isActive={activeTab === "categorias"}
+                  onClick={() => setActiveTab("categorias")}
+                  tooltip="Categorias"
+                >
+                  <Tags className="h-4 w-4" />
+                  <span>Categorias</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
