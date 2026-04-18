@@ -44,20 +44,20 @@ export default function AdminLoginPage() {
 				<div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-brand-100/50 blur-[120px]" />
 			</div>
 
-            {/* Back Button */}
-            <div className="absolute top-6 left-6 z-10">
-                <Link href="/">
-                    <Button variant="ghost" className="text-brand-700 hover:text-brand-900 hover:bg-brand-100/50 gap-2">
-                        <ArrowLeft className="w-4 h-4" />
-                        Voltar à Página Principal
-                    </Button>
-                </Link>
-            </div>
+			{/* Back Button */}
+			<div className="absolute top-6 left-6 z-10">
+				<Link href="/">
+					<Button variant="ghost" className="text-brand-700 hover:text-brand-900 hover:bg-brand-100/50 gap-2">
+						<ArrowLeft className="w-4 h-4" />
+						Voltar à Página Principal
+					</Button>
+				</Link>
+			</div>
 
 			<div className="w-full max-w-sm z-10 relative animate-in fade-in slide-in-from-bottom-4 duration-500">
 				{/* Logo */}
 				<div className="flex flex-col items-center mb-8">
-					<div className="w-16 h-16 rounded-[2rem] bg-brand-600 flex items-center justify-center shadow-xl shadow-brand-500/20 mb-6 transform rotate-3 hover:rotate-6 transition-transform cursor-default">
+					<div className="w-16 h-16 rounded-4xl bg-brand-600 flex items-center justify-center shadow-xl shadow-brand-500/20 mb-6 transform rotate-3 hover:rotate-6 transition-transform cursor-default">
 						<IceCream className="w-8 h-8 text-white -rotate-3" />
 					</div>
 					<h1 className="text-3xl font-black text-brand-900 tracking-tight">Área Restrita</h1>
@@ -108,7 +108,7 @@ export default function AdminLoginPage() {
 								</div>
 							)}
 						</CardContent>
-						
+
 						<CardFooter className="flex flex-col gap-5 pb-6">
 							<Button
 								type="submit"
@@ -125,15 +125,6 @@ export default function AdminLoginPage() {
 								)}
 								{loading ? "Autenticando..." : "Acessar Sistema"}
 							</Button>
-							
-							<div className="w-full border-t border-cream-200 pt-4 flex flex-col items-center">
-								<p className="text-xs text-brand-600/70 font-medium">Credenciais de demonstração</p>
-								<div className="flex items-center gap-2 mt-1">
-									<code className="bg-cream-100 text-brand-800 px-2 py-0.5 rounded font-mono text-xs">admin</code>
-									<span className="text-brand-400 text-xs">-</span>
-									<code className="bg-cream-100 text-brand-800 px-2 py-0.5 rounded font-mono text-xs">senha</code>
-								</div>
-							</div>
 						</CardFooter>
 					</form>
 				</Card>

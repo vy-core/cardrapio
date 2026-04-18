@@ -3,6 +3,8 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { CartItem, Produto, Adicionais } from "@/types";
+import Cookies from "js-cookie";
+
 
 interface CartStore {
   items: CartItem[];
@@ -101,19 +103,20 @@ export function getTrackedOrders(): string[] {
 
 // ─── Admin auth (localStorage simulation) ────────────────────────────────────
 
-const AUTH_KEY = "sorveteria-admin-token";
+const AUTH_KEY = "authToken";
 
 export function saveAdminToken(token: string) {
   if (typeof window === "undefined") return;
-  localStorage.setItem(AUTH_KEY, token);
+  Cookies.set(AUTH_KEY, token, { expires: 7, secure: true, sameSite: 'strict' });
 }
 
 export function getAdminToken(): string | null {
   if (typeof window === "undefined") return null;
-  return localStorage.getItem(AUTH_KEY);
+  return Cookies.get(AUTH_KEY) || null;
 }
 
 export function clearAdminToken() {
   if (typeof window === "undefined") return;
-  localStorage.removeItem(AUTH_KEY);
+  Cookies.remove(AUTH_KEY);
 }
+

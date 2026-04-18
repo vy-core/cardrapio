@@ -29,6 +29,7 @@ export default function PedidosView() {
         const token = getAdminToken() || "";
         getOrders(token).then((data) => {
             setOrders(data);
+            console.log(data);
             setLoading(false);
         }).catch((err) => {
             console.error(err);

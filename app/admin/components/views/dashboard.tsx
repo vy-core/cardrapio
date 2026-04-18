@@ -17,11 +17,6 @@ export default function DashboardView() {
         <div className="space-y-6">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 {cards.map((c, i) => (
-                    // <div key={i} className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-                    // 	<h3 className="text-[13px] font-bold text-gray-500">{c.title}</h3>
-                    // 	<p className="text-3xl mt-2">{c.value}</p>
-                    // 	<p className="text-sm font-semibold text-brand-600 mt-1">{c.subtitle}</p>
-                    // </div>
                     <Card key={i} className="gap-2 rounded-2xl">
                         <CardHeader className="flex flex-row items-center justify-between">
                             <CardTitle className="text-sm font-medium">

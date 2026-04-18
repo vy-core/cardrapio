@@ -21,7 +21,7 @@ import { AdminTab } from "@/types";
 import GruposView from "./components/views/groups";
 
 export default function AdminDashboardPage() {
-	const [activeTab, setActiveTab] = useState<AdminTab>("dashboard");
+	const [activeTab, setActiveTab] = useState<AdminTab>("pedidos");
 
 	return (
 		<SidebarProvider>

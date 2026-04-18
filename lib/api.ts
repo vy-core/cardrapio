@@ -22,7 +22,7 @@ export interface ApiOrder {
 
 export async function getOrders(token: string): Promise<Order[]> {
     const res = await fetch(`${API_URL}/pedido/`, {
-        headers: { "Authorization": token }
+        headers: { "Authorization": `Bearer ${token}` }
     }).catch(() => null);
 
     if (!res || !res.ok) {
