@@ -46,9 +46,15 @@ export async function getOrder(token: string, id: string): Promise<Order | null>
     return data;
 }
 
-export async function getOrderStatus(): Promise<OrderStatus[]> {
-    const res = await fetch(`${API_URL}/pedido/status`);
-    if (!res.ok) throw new Error("Failed to fetch order statuses");
+export async function getOrderStatus(token: string): Promise<OrderStatus[]> {
+    const res = await fetch(`${API_URL}/pedido/status`, {
+        headers: { "Authorization": `${token}` }
+    }).catch(() => null);
+
+    if (!res || !res.ok) {
+        console.error("Failed to fetch order statuses:", res?.status);
+        return [];
+    }
     const data: OrderStatus[] = await res.json();
     return data;
 }

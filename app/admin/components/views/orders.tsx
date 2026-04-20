@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getOrders } from "@/lib/api";
+import { getOrders, getOrderStatus } from "@/lib/api";
 import { getAdminToken } from "@/lib/cart-store";
 import { PAYMENT_LABELS, timeAgo, formatPrice, cn } from "@/lib/utils";
-import { ShoppingBag, MapPin, Phone, CreditCard, Clock, ChevronRight } from "lucide-react";
-import type { Order } from "@/types";
+import { ShoppingBag, MapPin, Phone, CreditCard, Clock, ChevronRight, Printer } from "lucide-react";
+import type { Order, OrderStatus } from "@/types";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
@@ -21,6 +21,7 @@ import {
 
 export default function PedidosView() {
     const [orders, setOrders] = useState<Order[]>([]);
+    const [orderStatus, setOrderStatus] = useState<OrderStatus[]>([]);
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
     const [isDesktop, setIsDesktop] = useState(true);
     const [loading, setLoading] = useState(true);
@@ -35,6 +36,13 @@ export default function PedidosView() {
             console.error(err);
             setLoading(false);
         });
+
+        getOrderStatus(token).then((data) => {
+            setOrderStatus(data);
+            console.log(data);
+        }).catch((err) => {
+            console.error(err);
+        });
     }, []);
 
     // Track window resize to toggle between Drawer and Desktop Card
@@ -47,6 +55,11 @@ export default function PedidosView() {
 
     const handleOrderClick = (order: Order) => {
         setSelectedOrder(order);
+    };
+
+    const handlePrint = (order: Order) => {
+        //this function will call the "save to pdf/print" function from the window document itself 
+        window.print();
     };
 
     return (
@@ -70,7 +83,7 @@ export default function PedidosView() {
                             className={cn(
                                 "w-full text-left bg-white p-4 rounded-xl border transition-all cursor-pointer shadow-sm flex flex-col gap-2",
                                 selectedOrder?.id === o.id
-                                    ? "border-brand-500 ring-1 ring-brand-500/20"
+                                    ? "border-brand-500 ring-1 ring-brand-500/20 bg-brand-50"
                                     : "border-gray-200 hover:border-brand-300"
                             )}
                         >
@@ -78,7 +91,7 @@ export default function PedidosView() {
                                 <div className="flex items-center gap-2">
                                     <span className="text-xs font-bold font-mono text-brand-600 bg-brand-50 px-2 py-0.5 rounded">{o.codigo_rastreio}</span>
                                     <Badge variant="outline" className={cn("text-[10px] uppercase font-bold px-2 py-0")}>
-                                        {o.status.status}
+                                        {o.status}
                                     </Badge>
                                 </div>
                                 <span className="text-xs font-semibold text-gray-400">{timeAgo(o.created_at)}</span>
@@ -117,7 +130,7 @@ export default function PedidosView() {
                                 <div className="flex items-center justify-between mb-1">
                                     <DrawerTitle className="text-xl font-bold text-gray-900">Detalhes do Pedido</DrawerTitle>
                                     <Badge variant="outline" className={cn("uppercase font-bold")}>
-                                        {selectedOrder.status.status}
+                                        {selectedOrder.status}
                                     </Badge>
                                 </div>
                                 <DrawerDescription className="font-mono text-brand-600 font-bold text-sm">
@@ -153,25 +166,35 @@ function OrderDetails({ order, isMobile }: { order: Order; isMobile?: boolean })
             <div className="flex-1 overflow-y-auto space-y-6 pr-1 custom-scrollbar">
                 {/* Client Info */}
                 <section>
-                    <div className="flex items-center gap-3 mb-4">
-                        <div className="w-11 h-11 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center shadow-sm">
-                            <Clock className="w-5 h-5" />
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="w-11 h-11 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center border border-brand-200/50">
+                                <Clock className="w-5 h-5" />
+                            </div>
+                            <div>
+                                <h3 className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Cliente</h3>
+                                <p className="font-bold text-gray-900 text-lg leading-tight">{order.nome_cliente}</p>
+                            </div>
                         </div>
-                        <div>
-                            <h3 className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Cliente</h3>
-                            <p className="font-bold text-gray-900 text-lg leading-tight">{order.nome_cliente}</p>
-                        </div>
+                        <Button className="flex items-center gap-2 bg-brand-600 hover:bg-brand-700"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                // handlePrint(order);
+                            }}>
+                            <Printer className="w-4 h-4" />
+                            Imprimir
+                        </Button>
                     </div>
 
                     <div className="space-y-3">
-                        <div className="flex items-start gap-3 bg-brand-50/30 p-4 rounded-2xl border border-brand-100/50">
+                        <div className="flex items-start gap-3 bg-brand-50/30 p-4 rounded-2xl border border-brand-200/50">
                             <MapPin className="w-4 h-4 text-brand-600 mt-1 shrink-0" />
                             <div className="text-sm">
                                 <p className="font-bold text-brand-950 mb-0.5">Endereço de Entrega</p>
                                 <p className="text-brand-800/80 font-medium leading-relaxed">{order.endereco}</p>
                             </div>
                         </div>
-                        <div className="flex items-center gap-3 bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                        <div className="flex items-center gap-3 bg-gray-50 p-4 rounded-2xl border border-gray-200">
                             <Phone className="w-4 h-4 text-gray-400 shrink-0" />
                             <div className="text-sm flex items-center gap-2">
                                 <p className="font-bold text-gray-700">Telefone:</p>
@@ -181,13 +204,11 @@ function OrderDetails({ order, isMobile }: { order: Order; isMobile?: boolean })
                     </div>
                 </section>
 
-                <Separator className="opacity-50" />
-
                 {/* Items */}
                 <section>
                     <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Itens do Pedido</h3>
-                        <span className="text-xs font-bold text-gray-400">{order.produtos.length} itens</span>
+                        <h3 className="text-[11px] font-bold text-gray-500 uppercase tracking-widest">Itens do Pedido</h3>
+                        <span className="text-xs font-bold text-gray-500">{order.produtos.length} itens</span>
                     </div>
                     <div className="space-y-4">
                         {order.produtos.map((item, idx) => (
@@ -199,8 +220,17 @@ function OrderDetails({ order, isMobile }: { order: Order; isMobile?: boolean })
                                     <div className="pt-0.5">
                                         <p className="font-bold text-gray-900 leading-tight group-hover:text-brand-600 transition-colors">{item.produto.nome}</p>
                                         <p className="text-[11px] text-gray-400 font-bold mt-1 uppercase tracking-tighter">
-                                            {formatPrice(item.produto.preco)} / un
+                                            {formatPrice(item.valor_total)} / un
                                         </p>
+                                        {item.adicionais.length > 0 && (
+                                            <div className="mt-1 text-xs text-gray-500">
+                                                {item.adicionais.map((add, i) => (
+                                                    <div key={i} className="ml-2">
+                                                        • {add.adicional.nome} {add.valor_total > 0 && `(+${formatPrice(add.valor_total)})`}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                                 <span className="font-bold text-gray-900 pt-0.5">{formatPrice(item.valor_total)}</span>
@@ -249,7 +279,7 @@ function OrderDetails({ order, isMobile }: { order: Order; isMobile?: boolean })
             {!isMobile && (
                 <div className="pt-6 mt-auto">
                     <Button className="w-full h-14 rounded-2xl bg-brand-600 hover:bg-brand-700 text-lg font-bold shadow-lg shadow-brand-600/20 group">
-                        Confirmar e Despachar
+                        Iniciar Preparo
                         <ChevronRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                     </Button>
                 </div>

@@ -1,7 +1,8 @@
 // ─── Domain Types ────────────────────────────────────────────────────────────
 
 export interface OrderStatus {
-  status: string;
+  id: string;
+  descricao: string;
 }
 
 export interface Produto {
@@ -67,6 +68,11 @@ export interface OrderItem {
   id: string;
   pedido_id: string;
   produto: Produto;
+  adicionais: {
+    adicional: Adicionais;
+    quantidade: number;
+    valor_total: number;
+  }[];
   quantidade: number;
   valor_total: number;
 }
@@ -76,7 +82,7 @@ export interface Order {
   nome_cliente: string;
   endereco: string;
   forma_pagamento: string;
-  status: OrderStatus;
+  status: string;
   created_at: string;
   telefone: string;
   id: string;
