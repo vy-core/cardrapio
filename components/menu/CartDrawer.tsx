@@ -96,7 +96,7 @@ export function CartDrawer() {
 
 	return (
 		<Drawer open={isOpen} onOpenChange={(open) => !open && handleClose()} direction="right">
-			<DrawerContent className="h-full bg-white p-0 before:hidden z-50 flex flex-col shadow-2xl border-none outline-none data-[vaul-drawer-direction=right]:w-full !max-w-md">
+			<DrawerContent className="h-full bg-white p-0 before:hidden z-50 flex flex-col shadow-2xl border-none outline-none data-[vaul-drawer-direction=right]:w-full max-w-md!">
 
 				{/* Header */}
 				<div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-white">
