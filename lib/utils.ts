@@ -1,6 +1,5 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import type { OrderStatus, PaymentMethod } from "@/types";
 
 // ─── Tailwind helper ──────────────────────────────────────────────────────────
 
@@ -38,39 +37,39 @@ export function timeAgo(iso: string): string {
 
 // ─── Status helpers ────────────────────────────────────────────────────────────
 
-export const STATUS_LABELS: Record<OrderStatus, string> = {
-  pending:          "Pendente",
-  confirmed:        "Confirmado",
-  preparing:        "Em preparo",
-  out_for_delivery: "Saiu para entrega",
-  delivered:        "Entregue",
-  cancelled:        "Cancelado",
-};
+// export const STATUS_LABELS: Record<OrderStatus, string> = {
+//   pending:          "Pendente",
+//   confirmed:        "Confirmado",
+//   preparing:        "Em preparo",
+//   out_for_delivery: "Saiu para entrega",
+//   delivered:        "Entregue",
+//   cancelled:        "Cancelado",
+// };
 
-export const STATUS_COLORS: Record<OrderStatus, string> = {
-  pending:          "bg-amber-100 text-amber-800 border-amber-200",
-  confirmed:        "bg-blue-100 text-blue-800 border-blue-200",
-  preparing:        "bg-orange-100 text-orange-800 border-orange-200",
-  out_for_delivery: "bg-purple-100 text-purple-800 border-purple-200",
-  delivered:        "bg-green-100 text-green-800 border-green-200",
-  cancelled:        "bg-red-100 text-red-700 border-red-200",
-};
+// export const STATUS_COLORS: Record<OrderStatus, string> = {
+//   pending:          "bg-amber-100 text-amber-800 border-amber-200",
+//   confirmed:        "bg-blue-100 text-blue-800 border-blue-200",
+//   preparing:        "bg-orange-100 text-orange-800 border-orange-200",
+//   out_for_delivery: "bg-purple-100 text-purple-800 border-purple-200",
+//   delivered:        "bg-green-100 text-green-800 border-green-200",
+//   cancelled:        "bg-red-100 text-red-700 border-red-200",
+// };
 
-export const STATUS_STEP: Record<OrderStatus, number> = {
-  pending: 0, confirmed: 1, preparing: 2, out_for_delivery: 3, delivered: 4, cancelled: -1,
-};
+// export const STATUS_STEP: Record<OrderStatus, number> = {
+//   pending: 0, confirmed: 1, preparing: 2, out_for_delivery: 3, delivered: 4, cancelled: -1,
+// };
 
-export const NEXT_STATUS: Partial<Record<OrderStatus, OrderStatus>> = {
-  pending:          "confirmed",
-  confirmed:        "preparing",
-  preparing:        "out_for_delivery",
-  out_for_delivery: "delivered",
-};
+// export const NEXT_STATUS: Partial<Record<OrderStatus, OrderStatus>> = {
+//   pending:          "confirmed",
+//   confirmed:        "preparing",
+//   preparing:        "out_for_delivery",
+//   out_for_delivery: "delivered",
+// };
 
 // ─── Payment labels ───────────────────────────────────────────────────────────
 
-export const PAYMENT_LABELS: Record<PaymentMethod, string> = {
-  pix:  "Pix",
+export const PAYMENT_LABELS: Record<string, string> = {
+  pix: "Pix",
   card: "Cartão",
   cash: "Dinheiro",
 };

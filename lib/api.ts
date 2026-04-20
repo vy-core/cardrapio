@@ -1,4 +1,4 @@
-import { Categoria, Produto as Produto, Order, OrderStatus, OrderItem, GruposAdicionais, Grupo } from "@/types";
+import { Categoria, Produto, Order, Grupo, OrderStatus } from "@/types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://cardrapio-api-v2.vercel.app";
 
@@ -30,6 +30,56 @@ export async function getOrders(token: string): Promise<Order[]> {
         return [];
     }
     const data: Order[] = await res.json();
+    return data;
+}
+
+export async function getOrder(token: string, id: string): Promise<Order | null> {
+    const res = await fetch(`${API_URL}/pedido/${id}`, {
+        headers: { "Authorization": `${token}` }
+    }).catch(() => null);
+
+    if (!res || !res.ok) {
+        console.error("Failed to fetch order:", res?.status);
+        return null;
+    }
+    const data: Order = await res.json();
+    return data;
+}
+
+export async function getOrderStatus(): Promise<OrderStatus[]> {
+    const res = await fetch(`${API_URL}/pedido/status`);
+    if (!res.ok) throw new Error("Failed to fetch order statuses");
+    const data: OrderStatus[] = await res.json();
+    return data;
+}
+
+export async function createOrder(order: Order): Promise<Order> {
+    const res = await fetch(`${API_URL}/pedido/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(order)
+    }).catch(() => null);
+
+    if (!res || !res.ok) {
+        console.error("Failed to create order:", res?.status);
+        throw new Error("Failed to create order");
+    }
+    const data: Order = await res.json();
+    return data;
+}
+
+export async function updateOrderStatus(token: string, id: string, status: OrderStatus): Promise<Order | null> {
+    const res = await fetch(`${API_URL}/pedido/change-status/${id}`, {
+        method: "PATCH",
+        headers: { "Authorization": `${token}` },
+        body: JSON.stringify({ status })
+    }).catch(() => null);
+
+    if (!res || !res.ok) {
+        console.error("Failed to update order status:", res?.status);
+        return null;
+    }
+    const data: Order = await res.json();
     return data;
 }
 

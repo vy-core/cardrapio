@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { getOrders } from "@/lib/api";
 import { getAdminToken } from "@/lib/cart-store";
-import { STATUS_LABELS, STATUS_COLORS, PAYMENT_LABELS, timeAgo, formatPrice, cn } from "@/lib/utils";
+import { PAYMENT_LABELS, timeAgo, formatPrice, cn } from "@/lib/utils";
 import { ShoppingBag, MapPin, Phone, CreditCard, Clock, ChevronRight } from "lucide-react";
 import type { Order } from "@/types";
 import { Badge } from "@/components/ui/badge";
@@ -76,18 +76,18 @@ export default function PedidosView() {
                         >
                             <div className="flex justify-between items-start">
                                 <div className="flex items-center gap-2">
-                                    <span className="text-xs font-bold font-mono text-brand-600 bg-brand-50 px-2 py-0.5 rounded">{o.tracking_code}</span>
-                                    <Badge variant="outline" className={cn("text-[10px] uppercase font-bold px-2 py-0", STATUS_COLORS[o.status])}>
-                                        {STATUS_LABELS[o.status]}
+                                    <span className="text-xs font-bold font-mono text-brand-600 bg-brand-50 px-2 py-0.5 rounded">{o.codigo_rastreio}</span>
+                                    <Badge variant="outline" className={cn("text-[10px] uppercase font-bold px-2 py-0")}>
+                                        {o.status.status}
                                     </Badge>
                                 </div>
                                 <span className="text-xs font-semibold text-gray-400">{timeAgo(o.created_at)}</span>
                             </div>
                             <div className="flex items-center justify-between">
-                                <h4 className="font-bold text-gray-900 text-base">{o.customer_name}</h4>
+                                <h4 className="font-bold text-gray-900 text-base">{o.nome_cliente}</h4>
                                 <span className="font-bold text-brand-700">{formatPrice(o.total)}</span>
                             </div>
-                            <p className="text-sm font-medium text-gray-500 line-clamp-1">{o.items.map(i => `${i.quantity}x ${i.product_name}`).join(", ")}</p>
+                            <p className="text-sm font-medium text-gray-500 line-clamp-1">{o.produtos.map(i => `${i.quantidade}x ${i.produto.nome}`).join(", ")}</p>
                         </button>
                     ))}
                 </div>
@@ -116,12 +116,12 @@ export default function PedidosView() {
                             <DrawerHeader className="border-b px-6 py-5 text-left shrink-0">
                                 <div className="flex items-center justify-between mb-1">
                                     <DrawerTitle className="text-xl font-bold text-gray-900">Detalhes do Pedido</DrawerTitle>
-                                    <Badge variant="outline" className={cn("uppercase font-bold", STATUS_COLORS[selectedOrder.status])}>
-                                        {STATUS_LABELS[selectedOrder.status]}
+                                    <Badge variant="outline" className={cn("uppercase font-bold")}>
+                                        {selectedOrder.status.status}
                                     </Badge>
                                 </div>
                                 <DrawerDescription className="font-mono text-brand-600 font-bold text-sm">
-                                    {selectedOrder.tracking_code}
+                                    {selectedOrder.codigo_rastreio}
                                 </DrawerDescription>
                             </DrawerHeader>
 
@@ -159,7 +159,7 @@ function OrderDetails({ order, isMobile }: { order: Order; isMobile?: boolean })
                         </div>
                         <div>
                             <h3 className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Cliente</h3>
-                            <p className="font-bold text-gray-900 text-lg leading-tight">{order.customer_name}</p>
+                            <p className="font-bold text-gray-900 text-lg leading-tight">{order.nome_cliente}</p>
                         </div>
                     </div>
 
@@ -168,14 +168,14 @@ function OrderDetails({ order, isMobile }: { order: Order; isMobile?: boolean })
                             <MapPin className="w-4 h-4 text-brand-600 mt-1 shrink-0" />
                             <div className="text-sm">
                                 <p className="font-bold text-brand-950 mb-0.5">Endereço de Entrega</p>
-                                <p className="text-brand-800/80 font-medium leading-relaxed">{order.address}</p>
+                                <p className="text-brand-800/80 font-medium leading-relaxed">{order.endereco}</p>
                             </div>
                         </div>
                         <div className="flex items-center gap-3 bg-gray-50 p-4 rounded-2xl border border-gray-100">
                             <Phone className="w-4 h-4 text-gray-400 shrink-0" />
                             <div className="text-sm flex items-center gap-2">
                                 <p className="font-bold text-gray-700">Telefone:</p>
-                                <p className="text-gray-500 font-medium">{order.phone}</p>
+                                <p className="text-gray-500 font-medium">{order.telefone}</p>
                             </div>
                         </div>
                     </div>
@@ -187,23 +187,23 @@ function OrderDetails({ order, isMobile }: { order: Order; isMobile?: boolean })
                 <section>
                     <div className="flex items-center justify-between mb-4">
                         <h3 className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Itens do Pedido</h3>
-                        <span className="text-xs font-bold text-gray-400">{order.items.length} itens</span>
+                        <span className="text-xs font-bold text-gray-400">{order.produtos.length} itens</span>
                     </div>
                     <div className="space-y-4">
-                        {order.items.map((item, idx) => (
+                        {order.produtos.map((item, idx) => (
                             <div key={idx} className="flex justify-between items-start group">
                                 <div className="flex gap-3">
                                     <div className="font-black text-brand-600 bg-brand-50 w-7 h-7 rounded-lg flex items-center justify-center text-xs shrink-0 border border-brand-100">
-                                        {item.quantity}
+                                        {item.quantidade}
                                     </div>
                                     <div className="pt-0.5">
-                                        <p className="font-bold text-gray-900 leading-tight group-hover:text-brand-600 transition-colors">{item.product_name}</p>
+                                        <p className="font-bold text-gray-900 leading-tight group-hover:text-brand-600 transition-colors">{item.produto.nome}</p>
                                         <p className="text-[11px] text-gray-400 font-bold mt-1 uppercase tracking-tighter">
-                                            {formatPrice(item.unit_price)} / un
+                                            {formatPrice(item.produto.preco)} / un
                                         </p>
                                     </div>
                                 </div>
-                                <span className="font-bold text-gray-900 pt-0.5">{formatPrice(item.subtotal)}</span>
+                                <span className="font-bold text-gray-900 pt-0.5">{formatPrice(item.valor_total)}</span>
                             </div>
                         ))}
                     </div>
@@ -232,13 +232,13 @@ function OrderDetails({ order, isMobile }: { order: Order; isMobile?: boolean })
                             </div>
                             <div>
                                 <h3 className="text-[10px] font-bold text-brand-300 uppercase tracking-widest mb-0.5">Meio de Pagamento</h3>
-                                <p className="font-bold text-white text-base">{PAYMENT_LABELS[order.payment_method]}</p>
+                                <p className="font-bold text-white text-base capitalize">{order.forma_pagamento.toLowerCase()}</p>
                             </div>
                         </div>
-                        {order.change_amount && order.change_amount > 0 && (
+                        {order.troco && order.troco > 0 && (
                             <div className="text-right">
                                 <p className="text-[10px] font-bold text-brand-300 uppercase">Troco para</p>
-                                <p className="font-black text-brand-100 text-lg">{formatPrice(order.change_amount)}</p>
+                                <p className="font-black text-brand-100 text-lg">{formatPrice(order.troco)}</p>
                             </div>
                         )}
                     </div>

@@ -1,14 +1,8 @@
 // ─── Domain Types ────────────────────────────────────────────────────────────
 
-export type PaymentMethod = "pix" | "card" | "cash";
-
-export type OrderStatus =
-  | "pending"
-  | "confirmed"
-  | "preparing"
-  | "out_for_delivery"
-  | "delivered"
-  | "cancelled";
+export interface OrderStatus {
+  status: string;
+}
 
 export interface Produto {
   id: string;
@@ -71,28 +65,26 @@ export interface CartItem {
 
 export interface OrderItem {
   id: string;
-  order_id: string;
-  product_id: string;
-  product_name: string;
-  unit_price: number;
-  quantity: number;
-  subtotal: number;
+  pedido_id: string;
+  produto: Produto;
+  quantidade: number;
+  valor_total: number;
 }
 
 export interface Order {
-  id: string;
-  tracking_code: string;
-  customer_name: string;
-  phone: string;
-  address: string;
-  payment_method: PaymentMethod;
-  change_amount?: number;
-  notes?: string;
+  codigo_rastreio: string;
+  nome_cliente: string;
+  endereco: string;
+  forma_pagamento: string;
   status: OrderStatus;
-  total: number;
-  items: OrderItem[];
   created_at: string;
-  updated_at: string;
+  telefone: string;
+  id: string;
+  observacao: string;
+  pagamento_entrega: boolean;
+  total: number;
+  troco: number;
+  produtos: OrderItem[];
 }
 
 // ─── Admin ───────────────────────────────────────────────────────────────────
@@ -113,7 +105,7 @@ export interface CreateOrderPayload {
   customer_name: string;
   phone: string;
   address: string;
-  payment_method: PaymentMethod;
+  payment_method: string;
   change_amount?: number;
   notes?: string;
   items: { product_id: string; quantity: number }[];
