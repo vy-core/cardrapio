@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { toast } from "sonner";
 
 interface ProductCardProps {
 	produto: Produto;
@@ -36,6 +37,7 @@ export function ProductCard({ produto }: ProductCardProps) {
 
 	const handleAddToCart = () => {
 		addItem(produto, quantity, observations, selectedToppings);
+		toast.success(`${produto.nome} adicionado ao carrinho!`);
 		setIsOpen(false);
 	};
 

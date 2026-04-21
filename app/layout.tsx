@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "Açai & Cia",
@@ -13,6 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
+      <Toaster richColors />
       <body>{children}</body>
     </html>
   );
